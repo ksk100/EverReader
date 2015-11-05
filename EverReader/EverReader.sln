@@ -1,0 +1,33 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 14
+VisualStudioVersion = 14.0.23107.0
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{493A2C4D-4F86-488E-B7E4-66E483770F6F}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{F441B303-A0E9-4095-B263-EC35F3B6E383}"
+	ProjectSection(SolutionItems) = preProject
+		global.json = global.json
+		NuGet.Config = NuGet.Config
+	EndProjectSection
+EndProject
+Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "EverReader", "src\EverReader\EverReader.xproj", "{B1E45B7C-CE78-417F-A1CB-BB5FD1CE783D}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{B1E45B7C-CE78-417F-A1CB-BB5FD1CE783D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B1E45B7C-CE78-417F-A1CB-BB5FD1CE783D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B1E45B7C-CE78-417F-A1CB-BB5FD1CE783D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B1E45B7C-CE78-417F-A1CB-BB5FD1CE783D}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{B1E45B7C-CE78-417F-A1CB-BB5FD1CE783D} = {493A2C4D-4F86-488E-B7E4-66E483770F6F}
+	EndGlobalSection
+EndGlobal
