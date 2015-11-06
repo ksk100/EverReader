@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
+using EverReader.ValidationAttributes;
 
 namespace EverReader.ViewModels.Account
 {
@@ -23,5 +24,10 @@ namespace EverReader.ViewModels.Account
         [Display(Name = "Confirm password")]
         [Compare("Password", ErrorMessage = "The password and confirmation password do not match.")]
         public string ConfirmPassword { get; set; }
+
+        [Required]
+        [Display(Name = "I agree to the Terms and Conditions")]
+        [MustBeTrue(ErrorMessage = "You must agree to the terms and conditions")]
+        public bool AgreeToTCs { get; set; }
     }
 }
