@@ -1,4 +1,4 @@
-﻿{
+{
   "webroot": "wwwroot",
   "userSecretsId": "aspnet5-EverReader-8cb85e3b-641b-4dc4-8c02-c7c7690098e0",
   "version": "1.0.0-*",
@@ -35,8 +35,11 @@
   },
 
   "frameworks": {
-    "dnx451": { },
-    "dnxcore50": { }
+    "dnx451": {
+      "dependencies": {
+        "AsyncOAuth.Evernote.Simple": "0.2.0"
+      }
+    }
   },
 
   "exclude": [
