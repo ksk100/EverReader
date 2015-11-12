@@ -7,7 +7,7 @@ using EverReader.Models;
 
 namespace EverReader.Migrations
 {
-    [DbContext(typeof(ApplicationDbContext))]
+    [DbContext(typeof(EverReaderContext))]
     [Migration("20151106151704_Initial")]
     partial class Initial
     {

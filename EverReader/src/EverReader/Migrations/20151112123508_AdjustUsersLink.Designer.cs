@@ -8,9 +8,10 @@ using EverReader.Models;
 namespace EverReader.Migrations
 {
     [DbContext(typeof(EverReaderContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20151112123508_AdjustUsersLink")]
+    partial class AdjustUsersLink
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
             modelBuilder
                 .Annotation("ProductVersion", "7.0.0-beta8-15964")
@@ -30,7 +31,7 @@ namespace EverReader.Migrations
 
                     b.Property<bool>("EmailConfirmed");
 
-                    b.Property<int>("EvernoteCredentialsId");
+                    b.Property<int?>("EvernoteCredentialsId");
 
                     b.Property<bool>("HasAuthorisedEvernote");
 

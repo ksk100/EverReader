@@ -4,20 +4,18 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNet.Identity.EntityFramework;
 using Microsoft.Data.Entity;
-using AsyncOAuth.Evernote.Simple;
 
 namespace EverReader.Models
 {
-    public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
+    public class EverReaderContext : IdentityDbContext<ApplicationUser>
     {
-        public bool HasAuthorisedEvernote { get; set; }
-
-        public DateTime? EvernoteAuthorisedUntilDate { get; set; }
-
-        public EvernoteCredentials EvernoteCredentials { get; set; }
+        public DbSet<ApplicationUser> ApplicationUsers { get; set; }
+        public DbSet<EFDbEvernoteCredentials> EvernoteCredentials { get; set; }
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
+            // builder.Entity<ApplicationUser>().HasOne(u => u.EvernoteCredentials);
+
             base.OnModelCreating(builder);
         }
     }

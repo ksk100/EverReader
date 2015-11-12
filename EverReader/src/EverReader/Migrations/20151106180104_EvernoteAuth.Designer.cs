@@ -7,7 +7,7 @@ using EverReader.Models;
 
 namespace EverReader.Migrations
 {
-    [DbContext(typeof(ApplicationDbContext))]
+    [DbContext(typeof(EverReaderContext))]
     [Migration("20151106180104_EvernoteAuth")]
     partial class EvernoteAuth
     {

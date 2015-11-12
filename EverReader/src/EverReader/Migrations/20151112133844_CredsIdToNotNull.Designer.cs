@@ -8,9 +8,10 @@ using EverReader.Models;
 namespace EverReader.Migrations
 {
     [DbContext(typeof(EverReaderContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20151112133844_CredsIdToNotNull")]
+    partial class CredsIdToNotNull
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
             modelBuilder
                 .Annotation("ProductVersion", "7.0.0-beta8-15964")
