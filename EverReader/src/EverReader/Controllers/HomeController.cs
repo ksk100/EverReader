@@ -31,5 +31,6 @@ namespace EverReader.Controllers
         {
             return View("~/Views/Shared/Error.cshtml");
         }
+
     }
 }
