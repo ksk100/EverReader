@@ -21,7 +21,7 @@ namespace EverReader.Controllers
         private readonly SignInManager<ApplicationUser> _signInManager;
         private readonly IEmailSender _emailSender;
         private readonly ISmsSender _smsSender;
-        private readonly ApplicationDbContext _applicationDbContext;
+        private readonly EverReaderContext _applicationDbContext;
         private static bool _databaseChecked;
 
         public AccountController(
@@ -29,7 +29,7 @@ namespace EverReader.Controllers
             SignInManager<ApplicationUser> signInManager,
             IEmailSender emailSender,
             ISmsSender smsSender,
-            ApplicationDbContext applicationDbContext)
+            EverReaderContext applicationDbContext)
         {
             _userManager = userManager;
             _signInManager = signInManager;
@@ -438,7 +438,7 @@ namespace EverReader.Controllers
         // not yet supported in this release.
         // Please see this http://go.microsoft.com/fwlink/?LinkID=615859 for more information on how to do deploy the database
         // when publishing your application.
-        private static void EnsureDatabaseCreated(ApplicationDbContext context)
+        private static void EnsureDatabaseCreated(EverReaderContext context)
         {
             if (!_databaseChecked)
             {

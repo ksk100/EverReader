@@ -10,7 +10,7 @@ using EverReader.Models;
 
 namespace EverReader.Migrations
 {
-    [DbContext(typeof(ApplicationDbContext))]
+    [DbContext(typeof(EverReaderContext))]
     [Migration("00000000000000_CreateIdentitySchema")]
     partial class CreateIdentitySchema
     {

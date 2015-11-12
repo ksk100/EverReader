@@ -4,6 +4,8 @@
   "version": "1.0.0-*",
 
   "dependencies": {
+    "AsyncOAuth": "0.7.0",
+    "AutoMapper": "4.1.1",
     "EntityFramework.Commands": "7.0.0-beta8",
     "EntityFramework.SqlServer": "7.0.0-beta8",
     "Microsoft.AspNet.Authentication.Cookies": "1.0.0-beta8",
@@ -18,14 +20,16 @@
     "Microsoft.AspNet.Mvc": "6.0.0-beta8",
     "Microsoft.AspNet.Mvc.TagHelpers": "6.0.0-beta8",
     "Microsoft.AspNet.Server.Kestrel": "1.0.0-beta8",
+    "Microsoft.AspNet.Session": "1.0.0-beta8",
     "Microsoft.AspNet.StaticFiles": "1.0.0-beta8",
     "Microsoft.AspNet.Tooling.Razor": "1.0.0-beta8",
+    "Microsoft.Bcl.Build": "1.0.21",
     "Microsoft.Framework.Configuration.Abstractions": "1.0.0-beta8",
     "Microsoft.Framework.Configuration.Json": "1.0.0-beta8",
     "Microsoft.Framework.Configuration.UserSecrets": "1.0.0-beta8",
     "Microsoft.Framework.Logging": "1.0.0-beta8",
     "Microsoft.Framework.Logging.Console": "1.0.0-beta8",
-    "Microsoft.Framework.Logging.Debug" : "1.0.0-beta8",
+    "Microsoft.Framework.Logging.Debug": "1.0.0-beta8",
     "Microsoft.VisualStudio.Web.BrowserLink.Loader": "14.0.0-beta8"
   },
 
@@ -37,7 +41,7 @@
   "frameworks": {
     "dnx451": {
       "dependencies": {
-        "AsyncOAuth.Evernote.Simple": "0.2.0"
+        "AsyncOAuth.Evernote.Simple": "1.0.0-*"
       }
     }
   },

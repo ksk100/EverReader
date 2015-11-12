@@ -3,7 +3,7 @@
     ViewData["Title"] = "Manage your account";
 }
 
-<h2>@ViewData["Title"].</h2>
+<h2>@ViewData["Title"]</h2>
 <p class="text-success">@ViewData["StatusMessage"]</p>
 <div>
     <h4>Change your account settings</h4>
@@ -29,8 +29,16 @@
 
         <dt>Evernote:</dt>
         <dd>
+            @if (Model.HasAuthorisedEvernote)
+            {
+                @:Authorised until: @Model.EvernoteAuthorisedUntil
+            } else
+            {
+                @:Not authorised
+
+            }
             [
-                <a asp-controller="Manage" asp-action="AuthoriseEvernote">Authorise Evernote</a>
+                <a asp-controller="Manage" asp-action="AuthoriseEvernote">@(Model.HasAuthorisedEvernote ? "Reauthorise" : "Authorise") Evernote </a>
             ]
         </dd>
 

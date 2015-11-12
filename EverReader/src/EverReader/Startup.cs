@@ -17,6 +17,7 @@ using Microsoft.Framework.DependencyInjection;
 using Microsoft.Framework.Logging;
 using EverReader.Models;
 using EverReader.Services;
+using EverReader.DataAccess;
 
 namespace EverReader
 {
@@ -49,16 +50,23 @@ namespace EverReader
             // Add Entity Framework services to the services container.
             services.AddEntityFramework()
                 .AddSqlServer()
-                .AddDbContext<ApplicationDbContext>(options =>
+                .AddDbContext<EverReaderContext>(options =>
                     options.UseSqlServer(Configuration["Data:DefaultConnection:ConnectionString"]));
 
             // Add Identity services to the services container.
             services.AddIdentity<ApplicationUser, IdentityRole>()
-                .AddEntityFrameworkStores<ApplicationDbContext>()
+                .AddEntityFrameworkStores<EverReaderContext>()
                 .AddDefaultTokenProviders();
+
 
             // Add MVC services to the services container.
             services.AddMvc();
+            services.AddCaching();
+            services.AddSession();
+
+            services.AddOptions();
+
+            services.Configure<EvernoteOptions>(Configuration.GetSection("EvernoteOptions"));
 
             // Uncomment the following line to add Web API services which makes it easier to port Web API 2 controllers.
             // You will also need to add the Microsoft.AspNet.Mvc.WebApiCompatShim package to the 'dependencies' section of project.json.
@@ -67,6 +75,7 @@ namespace EverReader
             // Register application services.
             services.AddTransient<IEmailSender, AuthMessageSender>();
             services.AddTransient<ISmsSender, AuthMessageSender>();
+            services.AddTransient<IEverReaderDataAccess, EverReaderDataAccessEF7>();
         }
 
         // Configure is called after ConfigureServices is called.
@@ -125,6 +134,8 @@ namespace EverReader
             //    options.ConsumerSecret = Configuration["Authentication:Twitter:ConsumerSecret"];
             //});
 
+            app.UseSession();
+
             // Add MVC to the request pipeline.
             app.UseMvc(routes =>
             {
@@ -135,6 +146,8 @@ namespace EverReader
                 // Uncomment the following line to add a route for porting Web API 2 controllers.
                 // routes.MapWebApiRoute("DefaultApi", "api/{controller}/{id?}");
             });
+
+            //Configuration.
         }
     }
 }

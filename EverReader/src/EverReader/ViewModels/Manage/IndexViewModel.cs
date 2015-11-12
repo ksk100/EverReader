@@ -17,5 +17,9 @@ namespace EverReader.ViewModels.Manage
         public bool TwoFactor { get; set; }
 
         public bool BrowserRemembered { get; set; }
+
+        public bool HasAuthorisedEvernote { get; set; }
+
+        public DateTime EvernoteAuthorisedUntil { get; set; }
     }
 }

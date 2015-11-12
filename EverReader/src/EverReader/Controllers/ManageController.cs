@@ -6,9 +6,16 @@ using System.Security.Claims;
 using Microsoft.AspNet.Authorization;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Mvc;
+using Microsoft.AspNet.Session;
 using EverReader.Models;
 using EverReader.Services;
 using EverReader.ViewModels.Manage;
+using AsyncOAuth;
+using AsyncOAuth.Evernote.Simple;
+using Newtonsoft.Json;
+using Microsoft.AspNet.Http;
+using Microsoft.Framework.OptionsModel;
+using EverReader.DataAccess;
 
 namespace EverReader.Controllers
 {
@@ -19,21 +26,27 @@ namespace EverReader.Controllers
         private readonly SignInManager<ApplicationUser> _signInManager;
         private readonly IEmailSender _emailSender;
         private readonly ISmsSender _smsSender;
+        private readonly EvernoteOptions _evernoteOptions;
+        private readonly IEverReaderDataAccess _dataAccess;
 
         public ManageController(
             UserManager<ApplicationUser> userManager,
             SignInManager<ApplicationUser> signInManager,
             IEmailSender emailSender,
-            ISmsSender smsSender)
+            ISmsSender smsSender,
+            IOptions<EvernoteOptions> optionsAccessor,
+            IEverReaderDataAccess dataAccess)
         {
             _userManager = userManager;
             _signInManager = signInManager;
             _emailSender = emailSender;
             _smsSender = smsSender;
+            _evernoteOptions = optionsAccessor.Value;
+            _dataAccess = dataAccess;
         }
 
         //
-        // GET: /Account/Index
+        // GET: /Manage
         [HttpGet]
         public async Task<IActionResult> Index(ManageMessageId? message = null)
         {
@@ -47,71 +60,80 @@ namespace EverReader.Controllers
                 : "";
 
             var user = await GetCurrentUserAsync();
+
             var model = new IndexViewModel
             {
                 HasPassword = await _userManager.HasPasswordAsync(user),
                 PhoneNumber = await _userManager.GetPhoneNumberAsync(user),
                 TwoFactor = await _userManager.GetTwoFactorEnabledAsync(user),
                 Logins = await _userManager.GetLoginsAsync(user),
-                BrowserRemembered = await _signInManager.IsTwoFactorClientRememberedAsync(user)
+                BrowserRemembered = await _signInManager.IsTwoFactorClientRememberedAsync(user),
+                HasAuthorisedEvernote = user.HasAuthorisedEvernote,
+                EvernoteAuthorisedUntil = (user.EvernoteCredentials != null) ? user.EvernoteCredentials.Expires : DateTime.Now
             };
+
             return View(model);
         }
 
-        //
-        // GET: /Account/RemoveLogin
-        [HttpGet]
-        public async Task<IActionResult> RemoveLogin()
+        // 
+        // GET: /Manage/AuthoriseEvernote
+        public ActionResult AuthoriseEvernote()
         {
-            var user = await GetCurrentUserAsync();
-            var linkedAccounts = await _userManager.GetLoginsAsync(user);
-            ViewData["ShowRemoveButton"] = await _userManager.HasPasswordAsync(user) || linkedAccounts.Count > 1;
-            return View(linkedAccounts);
+            EvernoteAuthorizer evernoteAuthorizer = new EvernoteAuthorizer(_evernoteOptions.URL, _evernoteOptions.SharedKey, _evernoteOptions.SharedSecret);
+
+            RequestToken requestToken = evernoteAuthorizer.GetRequestToken("http://" + Request.Host.Value + Url.Action("EvernoteCallback", "Manage"));
+      
+            HttpContext.Session.SetString("RequestToken", JsonConvert.SerializeObject(requestToken));
+
+            // Generate the Evernote URL that we will redirect the user to in order to authorise
+            string callForwardUrl = evernoteAuthorizer.BuildAuthorizeUrl(requestToken);
+
+            return Redirect(callForwardUrl);
         }
 
-        //
-        // POST: /Manage/RemoveLogin
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> RemoveLogin(string loginProvider, string providerKey)
+        // 
+        // GET: /Manage/EvernoteCallback
+        public async Task<ActionResult> EvernoteCallback([FromQuery] string oauth_verifier)
         {
-            ManageMessageId? message = ManageMessageId.Error;
-            var user = await GetCurrentUserAsync();
-            if (user != null)
+            EvernoteCallbackViewModel evernoteCallbackViewModel = new EvernoteCallbackViewModel();
+
+            if (String.IsNullOrEmpty(oauth_verifier))
             {
-                var result = await _userManager.RemoveLoginAsync(user, loginProvider, providerKey);
-                if (result.Succeeded)
-                {
-                    await _signInManager.SignInAsync(user, isPersistent: false);
-                    message = ManageMessageId.RemoveLoginSuccess;
-                }
+                throw new ArgumentNullException(nameof(oauth_verifier), "Problem authenticating Evernote: did not receive OAuth verifier");
             }
-            return RedirectToAction(nameof(ManageLogins), new { Message = message });
-        }
 
-        //
-        // GET: /Account/AddPhoneNumber
-        public IActionResult AddPhoneNumber()
-        {
-            return View();
-        }
+            EvernoteAuthorizer evernoteAuthorizer = new EvernoteAuthorizer(_evernoteOptions.URL, _evernoteOptions.SharedKey, _evernoteOptions.SharedSecret);
 
-        //
-        // POST: /Account/AddPhoneNumber
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> AddPhoneNumber(AddPhoneNumberViewModel model)
-        {
-            if (!ModelState.IsValid)
-            {
-                return View(model);
-            }
-            // Generate the token and send it
+            RequestToken requestToken = (RequestToken)JsonConvert.DeserializeObject(HttpContext.Session.GetString("RequestToken"), typeof(RequestToken));
+
+            EvernoteCredentials evernoteCredentials = evernoteAuthorizer.ParseAccessToken(oauth_verifier, requestToken);
+
+            EFDbEvernoteCredentials efdbEvernoteCredentials = new EFDbEvernoteCredentials(evernoteCredentials);
+
             var user = await GetCurrentUserAsync();
-            var code = await _userManager.GenerateChangePhoneNumberTokenAsync(user, model.PhoneNumber);
-            await _smsSender.SendSmsAsync(model.PhoneNumber, "Your security code is: " + code);
-            return RedirectToAction(nameof(VerifyPhoneNumber), new { PhoneNumber = model.PhoneNumber });
+
+            if (evernoteCredentials == null)
+            {
+                evernoteCallbackViewModel.ErrorMessage = "You did not authorise application";
+                user.HasAuthorisedEvernote = false;
+            }
+            else
+            {
+                evernoteCallbackViewModel.SuccessMessage = "Evernote successfully authorised, you can now search for notes and start reading";
+
+                _dataAccess.UpdateEvernoteCredentials(efdbEvernoteCredentials);
+
+                user.HasAuthorisedEvernote = true;
+                user.EvernoteCredentials = efdbEvernoteCredentials;
+                user.EvernoteCredentialsId = efdbEvernoteCredentials.Id;
+            }
+
+            await _userManager.UpdateAsync(user);
+
+            return View(evernoteCallbackViewModel);
         }
+
+        #region Two-factor authentication
 
         //
         // POST: /Manage/EnableTwoFactorAuthentication
@@ -141,6 +163,35 @@ namespace EverReader.Controllers
                 await _signInManager.SignInAsync(user, isPersistent: false);
             }
             return RedirectToAction(nameof(Index), "Manage");
+        }
+
+        #endregion
+
+        #region Phone number management
+
+        //
+        // GET: /Account/AddPhoneNumber
+        public IActionResult AddPhoneNumber()
+        {
+            return View();
+        }
+
+
+        //
+        // POST: /Account/AddPhoneNumber
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> AddPhoneNumber(AddPhoneNumberViewModel model)
+        {
+            if (!ModelState.IsValid)
+            {
+                return View(model);
+            }
+            // Generate the token and send it
+            var user = await GetCurrentUserAsync();
+            var code = await _userManager.GenerateChangePhoneNumberTokenAsync(user, model.PhoneNumber);
+            await _smsSender.SendSmsAsync(model.PhoneNumber, "Your security code is: " + code);
+            return RedirectToAction(nameof(VerifyPhoneNumber), new { PhoneNumber = model.PhoneNumber });
         }
 
         //
@@ -196,6 +247,10 @@ namespace EverReader.Controllers
             return RedirectToAction(nameof(Index), new { Message = ManageMessageId.Error });
         }
 
+        #endregion
+
+        #region Password management
+
         //
         // GET: /Manage/ChangePassword
         [HttpGet]
@@ -205,7 +260,7 @@ namespace EverReader.Controllers
         }
 
         //
-        // POST: /Account/Manage
+        // POST: /Manage/ChangePassword
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> ChangePassword(ChangePasswordViewModel model)
@@ -263,6 +318,10 @@ namespace EverReader.Controllers
             return RedirectToAction(nameof(Index), new { Message = ManageMessageId.Error });
         }
 
+        #endregion
+
+        #region External logins management
+
         //GET: /Account/Manage
         [HttpGet]
         public async Task<IActionResult> ManageLogins(ManageMessageId? message = null)
@@ -319,6 +378,40 @@ namespace EverReader.Controllers
             return RedirectToAction(nameof(ManageLogins), new { Message = message });
         }
 
+
+        //
+        // GET: /Account/RemoveLogin
+        [HttpGet]
+        public async Task<IActionResult> RemoveLogin()
+        {
+            var user = await GetCurrentUserAsync();
+            var linkedAccounts = await _userManager.GetLoginsAsync(user);
+            ViewData["ShowRemoveButton"] = await _userManager.HasPasswordAsync(user) || linkedAccounts.Count > 1;
+            return View(linkedAccounts);
+        }
+
+        //
+        // POST: /Manage/RemoveLogin
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> RemoveLogin(string loginProvider, string providerKey)
+        {
+            ManageMessageId? message = ManageMessageId.Error;
+            var user = await GetCurrentUserAsync();
+            if (user != null)
+            {
+                var result = await _userManager.RemoveLoginAsync(user, loginProvider, providerKey);
+                if (result.Succeeded)
+                {
+                    await _signInManager.SignInAsync(user, isPersistent: false);
+                    message = ManageMessageId.RemoveLoginSuccess;
+                }
+            }
+            return RedirectToAction(nameof(ManageLogins), new { Message = message });
+        }
+
+        #endregion
+
         #region Helpers
 
         private void AddErrors(IdentityResult result)
@@ -353,7 +446,13 @@ namespace EverReader.Controllers
 
         private async Task<ApplicationUser> GetCurrentUserAsync()
         {
-            return await _userManager.FindByIdAsync(HttpContext.User.GetUserId());
+            ApplicationUser user = await _userManager.FindByIdAsync(HttpContext.User.GetUserId());
+
+            EFDbEvernoteCredentials credentials = _dataAccess.EFDbEvernoteCredentials.SingleOrDefault(cred => cred.Id == user.EvernoteCredentialsId);
+
+            user.EvernoteCredentials = credentials;
+            
+            return user;
         }
 
         private IActionResult RedirectToLocal(string returnUrl)

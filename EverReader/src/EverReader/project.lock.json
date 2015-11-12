@@ -19,16 +19,17 @@
           "lib/AsyncOAuth.dll": {}
         }
       },
-      "AsyncOAuth.Evernote.Simple/0.2.0": {
+      "AsyncOAuth.Evernote.Simple/1.0.0": {
+        "type": "project",
+        "framework": "DNX,Version=v4.5.1"
+      },
+      "AutoMapper/4.1.1": {
         "type": "package",
-        "dependencies": {
-          "AsyncOAuth": "0.7.0"
-        },
         "compile": {
-          "lib/net45/AsyncOAuth.Evernote.Simple.dll": {}
+          "lib/net45/AutoMapper.dll": {}
         },
         "runtime": {
-          "lib/net45/AsyncOAuth.Evernote.Simple.dll": {}
+          "lib/net45/AutoMapper.dll": {}
         }
       },
       "EntityFramework.Commands/7.0.0-beta8": {
@@ -1181,6 +1182,27 @@
           "lib/dnx451/Microsoft.AspNet.Server.Kestrel.dll": {}
         }
       },
+      "Microsoft.AspNet.Session/1.0.0-beta8": {
+        "type": "package",
+        "dependencies": {
+          "Microsoft.AspNet.Http.Abstractions": "1.0.0-beta8",
+          "Microsoft.Framework.Caching.Abstractions": "1.0.0-beta8",
+          "Microsoft.Framework.Logging.Abstractions": "1.0.0-beta8",
+          "Microsoft.Framework.OptionsModel": "1.0.0-beta8"
+        },
+        "frameworkAssemblies": [
+          "Microsoft.CSharp",
+          "mscorlib",
+          "System",
+          "System.Core"
+        ],
+        "compile": {
+          "lib/dnx451/Microsoft.AspNet.Session.dll": {}
+        },
+        "runtime": {
+          "lib/dnx451/Microsoft.AspNet.Session.dll": {}
+        }
+      },
       "Microsoft.AspNet.StaticFiles/1.0.0-beta8": {
         "type": "package",
         "dependencies": {
@@ -1270,7 +1292,7 @@
           "lib/net45/Microsoft.Threading.Tasks.Extensions.dll": {}
         }
       },
-      "Microsoft.Bcl.Build/1.0.4": {
+      "Microsoft.Bcl.Build/1.0.21": {
         "type": "package"
       },
       "Microsoft.CodeAnalysis.Analyzers/1.0.0": {
@@ -2146,16 +2168,17 @@
           "lib/AsyncOAuth.dll": {}
         }
       },
-      "AsyncOAuth.Evernote.Simple/0.2.0": {
+      "AsyncOAuth.Evernote.Simple/1.0.0": {
+        "type": "project",
+        "framework": "DNX,Version=v4.5.1"
+      },
+      "AutoMapper/4.1.1": {
         "type": "package",
-        "dependencies": {
-          "AsyncOAuth": "0.7.0"
-        },
         "compile": {
-          "lib/net45/AsyncOAuth.Evernote.Simple.dll": {}
+          "lib/net45/AutoMapper.dll": {}
         },
         "runtime": {
-          "lib/net45/AsyncOAuth.Evernote.Simple.dll": {}
+          "lib/net45/AutoMapper.dll": {}
         }
       },
       "EntityFramework.Commands/7.0.0-beta8": {
@@ -3311,6 +3334,27 @@
           "runtimes/win7-x86/native/libuv.dll": {}
         }
       },
+      "Microsoft.AspNet.Session/1.0.0-beta8": {
+        "type": "package",
+        "dependencies": {
+          "Microsoft.AspNet.Http.Abstractions": "1.0.0-beta8",
+          "Microsoft.Framework.Caching.Abstractions": "1.0.0-beta8",
+          "Microsoft.Framework.Logging.Abstractions": "1.0.0-beta8",
+          "Microsoft.Framework.OptionsModel": "1.0.0-beta8"
+        },
+        "frameworkAssemblies": [
+          "Microsoft.CSharp",
+          "mscorlib",
+          "System",
+          "System.Core"
+        ],
+        "compile": {
+          "lib/dnx451/Microsoft.AspNet.Session.dll": {}
+        },
+        "runtime": {
+          "lib/dnx451/Microsoft.AspNet.Session.dll": {}
+        }
+      },
       "Microsoft.AspNet.StaticFiles/1.0.0-beta8": {
         "type": "package",
         "dependencies": {
@@ -3400,7 +3444,7 @@
           "lib/net45/Microsoft.Threading.Tasks.Extensions.dll": {}
         }
       },
-      "Microsoft.Bcl.Build/1.0.4": {
+      "Microsoft.Bcl.Build/1.0.21": {
         "type": "package"
       },
       "Microsoft.CodeAnalysis.Analyzers/1.0.0": {
@@ -4276,16 +4320,17 @@
           "lib/AsyncOAuth.dll": {}
         }
       },
-      "AsyncOAuth.Evernote.Simple/0.2.0": {
+      "AsyncOAuth.Evernote.Simple/1.0.0": {
+        "type": "project",
+        "framework": "DNX,Version=v4.5.1"
+      },
+      "AutoMapper/4.1.1": {
         "type": "package",
-        "dependencies": {
-          "AsyncOAuth": "0.7.0"
-        },
         "compile": {
-          "lib/net45/AsyncOAuth.Evernote.Simple.dll": {}
+          "lib/net45/AutoMapper.dll": {}
         },
         "runtime": {
-          "lib/net45/AsyncOAuth.Evernote.Simple.dll": {}
+          "lib/net45/AutoMapper.dll": {}
         }
       },
       "EntityFramework.Commands/7.0.0-beta8": {
@@ -5441,6 +5486,27 @@
           "runtimes/win7-x64/native/libuv.dll": {}
         }
       },
+      "Microsoft.AspNet.Session/1.0.0-beta8": {
+        "type": "package",
+        "dependencies": {
+          "Microsoft.AspNet.Http.Abstractions": "1.0.0-beta8",
+          "Microsoft.Framework.Caching.Abstractions": "1.0.0-beta8",
+          "Microsoft.Framework.Logging.Abstractions": "1.0.0-beta8",
+          "Microsoft.Framework.OptionsModel": "1.0.0-beta8"
+        },
+        "frameworkAssemblies": [
+          "Microsoft.CSharp",
+          "mscorlib",
+          "System",
+          "System.Core"
+        ],
+        "compile": {
+          "lib/dnx451/Microsoft.AspNet.Session.dll": {}
+        },
+        "runtime": {
+          "lib/dnx451/Microsoft.AspNet.Session.dll": {}
+        }
+      },
       "Microsoft.AspNet.StaticFiles/1.0.0-beta8": {
         "type": "package",
         "dependencies": {
@@ -5530,7 +5596,7 @@
           "lib/net45/Microsoft.Threading.Tasks.Extensions.dll": {}
         }
       },
-      "Microsoft.Bcl.Build/1.0.4": {
+      "Microsoft.Bcl.Build/1.0.21": {
         "type": "package"
       },
       "Microsoft.CodeAnalysis.Analyzers/1.0.0": {
@@ -6391,6 +6457,10 @@
     }
   },
   "libraries": {
+    "AsyncOAuth.Evernote.Simple/1.0.0": {
+      "type": "project",
+      "path": "../../wrap/AsyncOAuth.Evernote.Simple/project.json"
+    },
     "AsyncOAuth/0.7.0": {
       "type": "package",
       "sha512": "OYAScR44f0iUYqKgr3Kt1wpi8Kb1QYDeRvRtZuLMDw3ssJzbCU9++Yud76BBCA8vpoDie8/44l1nr/IgGi/5Zw==",
@@ -6401,14 +6471,35 @@
         "lib/AsyncOAuth.dll"
       ]
     },
-    "AsyncOAuth.Evernote.Simple/0.2.0": {
+    "AutoMapper/4.1.1": {
       "type": "package",
-      "sha512": "kk904CBLaEXnwJa40IQjwuq1Ay0IM4ckDnQfwTB2HieFis5xfzjDAF5olsHQxIPyREqDjbuEm7ZDDb2UxY35Lw==",
+      "sha512": "wTNIFaF21i0heEEOMOLn4Ki991I+b6Ls+tiwTvmzVhkLo5PmSJcNLuf2eGJEtUnQ3UDBTAAdZEaXAgbTqOe2pg==",
       "files": [
-        "AsyncOAuth.Evernote.Simple.0.2.0.nupkg",
-        "AsyncOAuth.Evernote.Simple.0.2.0.nupkg.sha512",
-        "AsyncOAuth.Evernote.Simple.nuspec",
-        "lib/net45/AsyncOAuth.Evernote.Simple.dll"
+        "AutoMapper.4.1.1.nupkg",
+        "AutoMapper.4.1.1.nupkg.sha512",
+        "AutoMapper.nuspec",
+        "lib/dotnet/AutoMapper.dll",
+        "lib/dotnet/AutoMapper.xml",
+        "lib/MonoAndroid/AutoMapper.dll",
+        "lib/MonoAndroid/AutoMapper.XML",
+        "lib/MonoTouch/AutoMapper.dll",
+        "lib/MonoTouch/AutoMapper.XML",
+        "lib/net40/AutoMapper.dll",
+        "lib/net40/AutoMapper.xml",
+        "lib/net45/AutoMapper.dll",
+        "lib/net45/AutoMapper.xml",
+        "lib/portable-net45+win+wpa81+wp80+MonoAndroid10+Xamarin.iOS10+MonoTouch10/AutoMapper.dll",
+        "lib/portable-net45+win+wpa81+wp80+MonoAndroid10+Xamarin.iOS10+MonoTouch10/AutoMapper.xml",
+        "lib/sl50/AutoMapper.dll",
+        "lib/sl50/AutoMapper.XML",
+        "lib/win/AutoMapper.dll",
+        "lib/win/AutoMapper.xml",
+        "lib/wp80/AutoMapper.dll",
+        "lib/wp80/AutoMapper.xml",
+        "lib/wpa81/AutoMapper.dll",
+        "lib/wpa81/AutoMapper.xml",
+        "lib/Xamarin.iOS10/AutoMapper.dll",
+        "lib/Xamarin.iOS10/AutoMapper.XML"
       ]
     },
     "EntityFramework.Commands/7.0.0-beta8": {
@@ -7243,6 +7334,20 @@
         "thirdpartynotices.txt"
       ]
     },
+    "Microsoft.AspNet.Session/1.0.0-beta8": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "yMycUv0dyC8cUXIWriA8tmG5M75/S9k+EFm8A7wgdQfGoLm8KRae8x0NB2ytMl8dSzrvCqHSV8AXOsS2Gby9aw==",
+      "files": [
+        "lib/dnx451/Microsoft.AspNet.Session.dll",
+        "lib/dnx451/Microsoft.AspNet.Session.xml",
+        "lib/dnxcore50/Microsoft.AspNet.Session.dll",
+        "lib/dnxcore50/Microsoft.AspNet.Session.xml",
+        "Microsoft.AspNet.Session.1.0.0-beta8.nupkg",
+        "Microsoft.AspNet.Session.1.0.0-beta8.nupkg.sha512",
+        "Microsoft.AspNet.Session.nuspec"
+      ]
+    },
     "Microsoft.AspNet.StaticFiles/1.0.0-beta8": {
       "type": "package",
       "serviceable": true,
@@ -7409,23 +7514,16 @@
         "ReleaseNotes.txt"
       ]
     },
-    "Microsoft.Bcl.Build/1.0.4": {
+    "Microsoft.Bcl.Build/1.0.21": {
       "type": "package",
-      "sha512": "y4VTyK0H1QRKi8O6+/od06Jc+eyY9x+6uDdMPAzjbeX5XL05qAce5lyQlMtcMzlQbu0UOQ/czbjsnjM+2Buq1w==",
+      "sha512": "sgHu4mIt0+NVGyI12Bj4hLPypNK55UOH+ologj2LqDCjxq3EbIxe/uAtHjY+fEwbE1dtsAHG8SXHf+V/EYbKTg==",
       "files": [
-        "content/net40/_._",
-        "content/netcore45/_._",
-        "content/portable-net40+win8+sl4+wp71/_._",
-        "content/sl4/_._",
-        "content/sl4-windowsphone71/_._",
-        "License.rtf",
-        "Microsoft.Bcl.Build.1.0.4.nupkg",
-        "Microsoft.Bcl.Build.1.0.4.nupkg.sha512",
-        "Microsoft.Bcl.Build.nuspec",
-        "tools/Install.ps1",
-        "tools/Microsoft.Bcl.Build.targets",
-        "tools/Microsoft.Bcl.Build.Tasks.dll",
-        "tools/Uninstall.ps1"
+        "build/Microsoft.Bcl.Build.targets",
+        "build/Microsoft.Bcl.Build.Tasks.dll",
+        "License-Stable.rtf",
+        "Microsoft.Bcl.Build.1.0.21.nupkg",
+        "Microsoft.Bcl.Build.1.0.21.nupkg.sha512",
+        "Microsoft.Bcl.Build.nuspec"
       ]
     },
     "Microsoft.CodeAnalysis.Analyzers/1.0.0": {
@@ -8755,6 +8853,8 @@
   },
   "projectFileDependencyGroups": {
     "": [
+      "AsyncOAuth >= 0.7.0",
+      "AutoMapper >= 4.1.1",
       "EntityFramework.Commands >= 7.0.0-beta8",
       "EntityFramework.SqlServer >= 7.0.0-beta8",
       "Microsoft.AspNet.Authentication.Cookies >= 1.0.0-beta8",
@@ -8769,8 +8869,10 @@
       "Microsoft.AspNet.Mvc >= 6.0.0-beta8",
       "Microsoft.AspNet.Mvc.TagHelpers >= 6.0.0-beta8",
       "Microsoft.AspNet.Server.Kestrel >= 1.0.0-beta8",
+      "Microsoft.AspNet.Session >= 1.0.0-beta8",
       "Microsoft.AspNet.StaticFiles >= 1.0.0-beta8",
       "Microsoft.AspNet.Tooling.Razor >= 1.0.0-beta8",
+      "Microsoft.Bcl.Build >= 1.0.21",
       "Microsoft.Framework.Configuration.Abstractions >= 1.0.0-beta8",
       "Microsoft.Framework.Configuration.Json >= 1.0.0-beta8",
       "Microsoft.Framework.Configuration.UserSecrets >= 1.0.0-beta8",
@@ -8780,7 +8882,7 @@
       "Microsoft.VisualStudio.Web.BrowserLink.Loader >= 14.0.0-beta8"
     ],
     "DNX,Version=v4.5.1": [
-      "AsyncOAuth.Evernote.Simple >= 0.2.0"
+      "AsyncOAuth.Evernote.Simple >= 1.0.0-*"
     ]
   }
 }

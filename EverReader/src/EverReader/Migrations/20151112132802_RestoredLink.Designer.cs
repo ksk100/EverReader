@@ -8,9 +8,10 @@ using EverReader.Models;
 namespace EverReader.Migrations
 {
     [DbContext(typeof(EverReaderContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20151112132802_RestoredLink")]
+    partial class RestoredLink
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
             modelBuilder
                 .Annotation("ProductVersion", "7.0.0-beta8-15964")
@@ -30,7 +31,7 @@ namespace EverReader.Migrations
 
                     b.Property<bool>("EmailConfirmed");
 
-                    b.Property<int>("EvernoteCredentialsId");
+                    b.Property<int?>("EvernoteCredentialsId");
 
                     b.Property<bool>("HasAuthorisedEvernote");
 
@@ -165,6 +166,13 @@ namespace EverReader.Migrations
                     b.HasKey("UserId", "RoleId");
 
                     b.Annotation("Relational:TableName", "AspNetUserRoles");
+                });
+
+            modelBuilder.Entity("EverReader.Models.ApplicationUser", b =>
+                {
+                    b.HasOne("EverReader.Models.EFDbEvernoteCredentials")
+                        .WithMany()
+                        .ForeignKey("EvernoteCredentialsId");
                 });
 
             modelBuilder.Entity("Microsoft.AspNet.Identity.EntityFramework.IdentityRoleClaim<string>", b =>
