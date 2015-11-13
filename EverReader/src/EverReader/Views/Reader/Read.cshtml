@@ -1,0 +1,13 @@
+﻿@model EverReader.ViewModels.Reader.ReaderViewModel
+
+@{
+    ViewBag.Title = "Reader: " + Model.Title;
+}
+
+<h2>@ViewData["Title"].</h2>
+
+<div class="row">
+    <div class="col-md-12">
+        @Html.Raw(@Model.Content)
+    </div>
+</div>

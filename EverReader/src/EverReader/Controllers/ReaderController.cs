@@ -10,8 +10,8 @@ using Microsoft.AspNet.Identity;
 using EverReader.DataAccess;
 using System.Security.Claims;
 using EverReader.Services;
-
-// For more information on enabling MVC for empty projects, visit http://go.microsoft.com/fwlink/?LinkID=397860
+using Evernote.EDAM.Type;
+using System.Net;
 
 namespace EverReader.Controllers
 {
@@ -56,9 +56,19 @@ namespace EverReader.Controllers
 
         [HttpGet]
         [Route("Reader/Read/{guid}")]
-        public IActionResult Read(string guid)
+        public async Task<IActionResult> Read(string guid)
         {
-            return View();
+            ApplicationUser user = await GetCurrentUserAsync();
+            IEvernoteService evernoteService = new EvernoteServiceSDK1(user.EvernoteCredentials);
+            Note note = evernoteService.GetNote(guid);
+
+            ReaderViewModel readerViewModel = new ReaderViewModel()
+            {
+                Title = note.Title,
+                Content = WebUtility.HtmlDecode(note.Content)
+            };
+
+            return View(readerViewModel);
         }
     }
 }
