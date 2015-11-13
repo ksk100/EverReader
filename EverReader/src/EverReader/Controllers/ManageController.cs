@@ -447,11 +447,7 @@ namespace EverReader.Controllers
         private async Task<ApplicationUser> GetCurrentUserAsync()
         {
             ApplicationUser user = await _userManager.FindByIdAsync(HttpContext.User.GetUserId());
-
-            EFDbEvernoteCredentials credentials = _dataAccess.EFDbEvernoteCredentials.SingleOrDefault(cred => cred.Id == user.EvernoteCredentialsId);
-
-            user.EvernoteCredentials = credentials;
-            
+            user.EvernoteCredentials = _dataAccess.EFDbEvernoteCredentials.SingleOrDefault(cred => cred.Id == user.EvernoteCredentialsId); ;
             return user;
         }
 

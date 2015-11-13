@@ -1,4 +1,5 @@
-﻿using System;
+﻿using EverReader.Models;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
@@ -11,5 +12,7 @@ namespace EverReader.ViewModels.Reader
     {
         [Display(Name="Search")]
         public string SearchField { get; set; }
+
+        public List<EvernoteNodeMetadataDecorator> SearchResults { get; set; }
     }
 }

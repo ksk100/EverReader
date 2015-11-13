@@ -161,6 +161,17 @@
           "lib/net45/EntityFramework.SqlServer.dll": {}
         }
       },
+      "Evernote.SDK/1.25.0": {
+        "type": "package",
+        "compile": {
+          "lib/net45/Evernote.dll": {},
+          "lib/net45/Thrift.dll": {}
+        },
+        "runtime": {
+          "lib/net45/Evernote.dll": {},
+          "lib/net45/Thrift.dll": {}
+        }
+      },
       "Ix-Async/1.2.5": {
         "type": "package",
         "frameworkAssemblies": [
@@ -2308,6 +2319,17 @@
         },
         "runtime": {
           "lib/net45/EntityFramework.SqlServer.dll": {}
+        }
+      },
+      "Evernote.SDK/1.25.0": {
+        "type": "package",
+        "compile": {
+          "lib/net45/Evernote.dll": {},
+          "lib/net45/Thrift.dll": {}
+        },
+        "runtime": {
+          "lib/net45/Evernote.dll": {},
+          "lib/net45/Thrift.dll": {}
         }
       },
       "Ix-Async/1.2.5": {
@@ -4462,6 +4484,17 @@
           "lib/net45/EntityFramework.SqlServer.dll": {}
         }
       },
+      "Evernote.SDK/1.25.0": {
+        "type": "package",
+        "compile": {
+          "lib/net45/Evernote.dll": {},
+          "lib/net45/Thrift.dll": {}
+        },
+        "runtime": {
+          "lib/net45/Evernote.dll": {},
+          "lib/net45/Thrift.dll": {}
+        }
+      },
       "Ix-Async/1.2.5": {
         "type": "package",
         "frameworkAssemblies": [
@@ -6593,6 +6626,25 @@
         "lib/dotnet/EntityFramework.SqlServer.xml",
         "lib/net45/EntityFramework.SqlServer.dll",
         "lib/net45/EntityFramework.SqlServer.xml"
+      ]
+    },
+    "Evernote.SDK/1.25.0": {
+      "type": "package",
+      "sha512": "vEziFk9dcBQDqoImI7tmHZKwcqOOp92eHxmShFY9afYANLgYka7O2qodMneKtjQJUiXkswcPz6k/Ph1ssr3psQ==",
+      "files": [
+        "Evernote.SDK.1.25.0.nupkg",
+        "Evernote.SDK.1.25.0.nupkg.sha512",
+        "Evernote.SDK.nuspec",
+        "lib/net40/Evernote.dll",
+        "lib/net40/Evernote.pdb",
+        "lib/net40/Thrift.dll",
+        "lib/net40/Thrift.pdb",
+        "lib/net45/Evernote.dll",
+        "lib/net45/Evernote.pdb",
+        "lib/net45/Thrift.dll",
+        "lib/net45/Thrift.pdb",
+        "LICENSE",
+        "README.md"
       ]
     },
     "Ix-Async/1.2.5": {
@@ -8857,6 +8909,7 @@
       "AutoMapper >= 4.1.1",
       "EntityFramework.Commands >= 7.0.0-beta8",
       "EntityFramework.SqlServer >= 7.0.0-beta8",
+      "Evernote.SDK >= 1.25.0",
       "Microsoft.AspNet.Authentication.Cookies >= 1.0.0-beta8",
       "Microsoft.AspNet.Authentication.Facebook >= 1.0.0-beta8",
       "Microsoft.AspNet.Authentication.Google >= 1.0.0-beta8",
