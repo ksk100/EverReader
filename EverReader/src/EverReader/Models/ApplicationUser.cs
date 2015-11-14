@@ -12,7 +12,7 @@ namespace EverReader.Models
     {
         public bool HasAuthorisedEvernote { get; set; } = false;
 
-        public int EvernoteCredentialsId { get; set; } = -1;
+        public int? EvernoteCredentialsId { get; set; }
 
         public virtual EFDbEvernoteCredentials EvernoteCredentials { get; set; }
     }

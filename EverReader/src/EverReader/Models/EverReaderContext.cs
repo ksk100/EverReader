@@ -11,11 +11,10 @@ namespace EverReader.Models
     {
         public DbSet<ApplicationUser> ApplicationUsers { get; set; }
         public DbSet<EFDbEvernoteCredentials> EvernoteCredentials { get; set; }
+        public DbSet<Bookmark> Bookmarks { get; set; }
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
-            // builder.Entity<ApplicationUser>().HasOne(u => u.EvernoteCredentials);
-
             base.OnModelCreating(builder);
         }
     }

@@ -9,5 +9,7 @@ namespace EverReader.ViewModels.Reader
     {
         public string Title { get; set; }
         public string Content { get; set; }
+        public string NoteGuid { get; set; }
+        public decimal PercentageRead { get; set; }
     }
 }
