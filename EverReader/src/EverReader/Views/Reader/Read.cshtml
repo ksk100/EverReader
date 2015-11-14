@@ -19,6 +19,10 @@
 </div>
 
 @section scripts {
+    <script type="text/javascript">
+        var noteGuid = "@Model.NoteGuid";
+        var percentageRead = @Model.PercentageRead;
+    </script>
     <script src="~/lib/moment/moment.js"></script>
     <script src="~/js/reader.js"></script>
 }

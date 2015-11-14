@@ -36,5 +36,17 @@ namespace EverReader.DataAccess
             _dbContext.SaveChanges();
         }
 
+
+        public Bookmark GetAutomaticBookmark(string userId, string guid)
+        {
+            return _dbContext.Bookmarks.SingleOrDefault(b => (b.UserId == userId) && (b.NoteGuid == guid) && b.Type == BookmarkType.Automatic);
+        }
+
+        public void SaveBookmark(Bookmark bookmark)
+        {
+            _dbContext.Bookmarks.Update(bookmark);
+            _dbContext.SaveChanges();
+        }
+
     }
 }

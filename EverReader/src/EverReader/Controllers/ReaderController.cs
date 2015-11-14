@@ -41,31 +41,32 @@ namespace EverReader.Controllers
         [HttpPost]
         public async Task<IActionResult> Index(FindNotesViewModel findNotesViewModel)
         {
-            ApplicationUser user = await GetCurrentUserAsync();
+            ApplicationUser user = await ControllerHelpers.GetCurrentUserAsync(_userManager, _dataAccess, HttpContext.User.GetUserId());
             IEvernoteService evernoteService = new EvernoteServiceSDK1(user.EvernoteCredentials);
             findNotesViewModel.SearchResults = evernoteService.GetNotesMetaList(findNotesViewModel.SearchField);
             return View("FindNotes", findNotesViewModel);
-        }
-
-        private async Task<ApplicationUser> GetCurrentUserAsync()
-        {
-            ApplicationUser user = await _userManager.FindByIdAsync(HttpContext.User.GetUserId());
-            user.EvernoteCredentials = _dataAccess.EFDbEvernoteCredentials.SingleOrDefault(cred => cred.Id == user.EvernoteCredentialsId); ;
-            return user;
         }
 
         [HttpGet]
         [Route("Reader/Read/{guid}")]
         public async Task<IActionResult> Read(string guid)
         {
-            ApplicationUser user = await GetCurrentUserAsync();
+            // TODO: check that the user has authorised Evernote
+            string currentUserId = HttpContext.User.GetUserId();
+            ApplicationUser user = await ControllerHelpers.GetCurrentUserAsync(_userManager, _dataAccess, currentUserId);
             IEvernoteService evernoteService = new EvernoteServiceSDK1(user.EvernoteCredentials);
+
+            // TODO: check that this note exists.
             Note note = evernoteService.GetNote(guid);
+
+            Bookmark bookmark = _dataAccess.GetAutomaticBookmark(currentUserId, guid);
 
             ReaderViewModel readerViewModel = new ReaderViewModel()
             {
                 Title = note.Title,
-                Content = WebUtility.HtmlDecode(note.Content)
+                Content = WebUtility.HtmlDecode(note.Content),
+                NoteGuid = note.Guid,
+                PercentageRead = bookmark == null ? 0 : bookmark.PercentageRead
             };
 
             return View(readerViewModel);

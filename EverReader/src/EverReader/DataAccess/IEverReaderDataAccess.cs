@@ -13,5 +13,9 @@ namespace EverReader.DataAccess
         EFDbEvernoteCredentials GetEvernoteCredentials(int? credentialsId);
 
         void UpdateEvernoteCredentials(EFDbEvernoteCredentials evernoteCredentials);
+
+        Bookmark GetAutomaticBookmark(string userId, string guid);
+
+        void SaveBookmark(Bookmark bookmark);
     }
 }
