@@ -4,7 +4,7 @@
     ViewBag.Title = "Find notes";
 }
 
-<h2>@ViewData["Title"].</h2>
+<h2>@ViewData["Title"]</h2>
 <div class="row">
     <div class="col-md-12">
         <section>
@@ -44,16 +44,19 @@
                         <a asp-action="Read" asp-controller="Reader" asp-route-guid="@item.BaseNoteMetadata.Guid">Read</a>
                     </td>
                     <td>
-                        @item.Title
-                        @if (!String.IsNullOrWhiteSpace(item.BaseNoteMetadata.Attributes.Source))
+                        <strong>@item.Title</strong>
+                        @if (!String.IsNullOrWhiteSpace(item.Source))
                         {
                             <br />
-                            <small>@item.BaseNoteMetadata.Attributes.Source</small>
+                            <small><strong>Source:</strong> @item.Source</small>
                         }
                         @if (!String.IsNullOrWhiteSpace(item.BaseNoteMetadata.Attributes.SourceURL))
                         {
-                            <br />
-                            <small>@item.BaseNoteMetadata.Attributes.SourceURL</small>
+                            if (!item.BaseNoteMetadata.Attributes.SourceURL.StartsWith("file://"))
+                            {
+                                <br />
+                                <small><strong>URL:</strong> <a href="@item.BaseNoteMetadata.Attributes.SourceURL">@item.BaseNoteMetadata.Attributes.SourceURL</a></small>
+                            }
                         }
                         @if (!String.IsNullOrWhiteSpace(item.BaseNoteMetadata.Attributes.SourceApplication))
                         {

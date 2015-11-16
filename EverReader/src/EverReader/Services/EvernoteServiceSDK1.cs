@@ -7,6 +7,7 @@ using Evernote.EDAM.NoteStore;
 using Thrift.Transport;
 using Thrift.Protocol;
 using Evernote.EDAM.Type;
+using Evernote.EDAM.Error;
 
 namespace EverReader.Services
 {
@@ -38,7 +39,14 @@ namespace EverReader.Services
             resultsSpec.IncludeTagGuids = true;
             resultsSpec.IncludeContentLength = true;
 
-            NotesMetadataList noteMetadataList = noteStore.findNotesMetadata(credentials.AuthToken, noteFilter, 0, 100, resultsSpec);
+            NotesMetadataList noteMetadataList;
+
+            try {
+                noteMetadataList = noteStore.findNotesMetadata(credentials.AuthToken, noteFilter, 0, 100, resultsSpec);
+            } catch (EDAMUserException)
+            {
+                throw new EvernoteServiceSDK1AuthorisationException();
+            }
 
             List<EvernoteNodeMetadataDecorator> notesMetaWrapperList = noteMetadataList.Notes.ConvertAll(noteMeta => new EvernoteNodeMetadataDecorator(noteMeta));
 
@@ -46,8 +54,22 @@ namespace EverReader.Services
         }
 
         public Note GetNote(string guid)
-        {           
-            return noteStore.getNote(credentials.AuthToken, guid, true, false, false, false);
+        {
+            Note note;
+
+            try
+            {
+                note = noteStore.getNote(credentials.AuthToken, guid, true, false, false, false);
+            }
+            catch (EDAMUserException)
+            {
+                throw new EvernoteServiceSDK1AuthorisationException();
+            }
+            catch (EDAMNotFoundException)
+            {
+                throw new EvernoteServiceSDK1NoteNotFoundException();
+            }
+            return note;
         }
     }
 }

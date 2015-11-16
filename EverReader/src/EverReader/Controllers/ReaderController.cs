@@ -33,8 +33,13 @@ namespace EverReader.Controllers
 
 
         // GET: /<controller>/
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
+            ApplicationUser user = await ControllerHelpers.GetCurrentUserAsync(_userManager, _dataAccess, HttpContext.User.GetUserId());          
+            if (user.EvernoteCredentials == null)
+            {
+                return View("MustAuthoriseEvernote");
+            }
             return View("FindNotes", new FindNotesViewModel());
         }
 
@@ -42,22 +47,47 @@ namespace EverReader.Controllers
         public async Task<IActionResult> Index(FindNotesViewModel findNotesViewModel)
         {
             ApplicationUser user = await ControllerHelpers.GetCurrentUserAsync(_userManager, _dataAccess, HttpContext.User.GetUserId());
+            if (user.EvernoteCredentials == null)
+            {
+                return View("MustAuthoriseEvernote");
+            }
             IEvernoteService evernoteService = new EvernoteServiceSDK1(user.EvernoteCredentials);
-            findNotesViewModel.SearchResults = evernoteService.GetNotesMetaList(findNotesViewModel.SearchField);
+            try
+            {
+                findNotesViewModel.SearchResults = evernoteService.GetNotesMetaList(findNotesViewModel.SearchField);
+            }
+            catch (EvernoteServiceSDK1AuthorisationException)
+            {
+                return View("EvernoteAuthorisationError");
+            }
             return View("FindNotes", findNotesViewModel);
         }
 
         [HttpGet]
-        [Route("Reader/Read/{guid}")]
+        [Route("Reader/Read/{guid:guid}")]
         public async Task<IActionResult> Read(string guid)
         {
-            // TODO: check that the user has authorised Evernote
             string currentUserId = HttpContext.User.GetUserId();
             ApplicationUser user = await ControllerHelpers.GetCurrentUserAsync(_userManager, _dataAccess, currentUserId);
+            if (user.EvernoteCredentials == null)
+            {
+                return View("MustAuthoriseEvernote");
+            }
             IEvernoteService evernoteService = new EvernoteServiceSDK1(user.EvernoteCredentials);
 
-            // TODO: check that this note exists.
-            Note note = evernoteService.GetNote(guid);
+            Note note;
+            try {
+                note = evernoteService.GetNote(guid);
+            }
+            catch (EvernoteServiceSDK1AuthorisationException)
+            {
+                // thrown if the user's credentials are no longer valid
+                return View("EvernoteAuthorisationError");
+            }
+            catch (EvernoteServiceSDK1NoteNotFoundException)
+            {
+                return View("NoteNotFoundError");
+            }
 
             Bookmark bookmark = _dataAccess.GetAutomaticBookmark(currentUserId, guid);
 
@@ -70,6 +100,11 @@ namespace EverReader.Controllers
             };
 
             return View(readerViewModel);
+        }
+
+        public string RecentlyRead()
+        {
+            return "To implement";
         }
     }
 }

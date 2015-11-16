@@ -36,6 +36,26 @@ namespace EverReader.Models
             }
         }
 
+        public string Source
+        {
+            get
+            {
+                if (String.IsNullOrWhiteSpace(BaseNoteMetadata.Attributes.Source))
+                {
+                    return null;
+                } else
+                {
+                    switch (BaseNoteMetadata.Attributes.Source)
+                    {
+                        case "web.clip":
+                            return "Web clipping";
+                        default:
+                            return BaseNoteMetadata.Attributes.Source;
+                    }
+                }
+            }
+        }
+
         public EvernoteNodeMetadataDecorator(NoteMetadata noteMetadata)
         {
             BaseNoteMetadata = noteMetadata;

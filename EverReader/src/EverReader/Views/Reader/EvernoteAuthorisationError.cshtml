@@ -1,0 +1,14 @@
+﻿@{
+    ViewBag.Title = "Evernote authorisation error";
+}
+<h2>@ViewData["Title"]</h2>
+
+<div class="row">
+    <div class="col-md-12">
+        <section>
+            <h4>There was a problem connecting to Evernote</h4>
+            <h5>Perhaps you've revoked access to EverReader, or the access you granted has expired?</h5>
+            <h5>Try <a asp-action="Index" asp-controller="Manage">reauthorising Evernote</a>, and if that doesn't work, <a asp-action="Contact" asp-controller="Home">contact support</a>.</h5>
+        </section>
+    </div>
+</div>
