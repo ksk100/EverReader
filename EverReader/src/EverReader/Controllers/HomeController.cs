@@ -28,6 +28,11 @@ namespace EverReader.Controllers
             return View();
         }
 
+        public IActionResult PrivacyPolicy()
+        {
+            return View();
+        }
+
         public IActionResult Error()
         {
             return View("~/Views/Shared/Error.cshtml");
