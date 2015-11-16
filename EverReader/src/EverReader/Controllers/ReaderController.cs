@@ -92,6 +92,16 @@ namespace EverReader.Controllers
 
             Bookmark bookmark = _dataAccess.GetAutomaticBookmark(currentUserId, guid);
 
+            if (bookmark == null)
+            {
+                bookmark = new Bookmark() { NoteGuid = guid,
+                    PercentageRead = 0,
+                    UserId = currentUserId,
+                    Type = BookmarkType.Automatic,
+                    Updated = DateTime.Now
+                };
+            }
+
             // update all the note metadata we store
             bookmark.NoteTitle = note.Title;
             bookmark.NoteCreated = EvernoteSDKHelper.ConvertEvernoteDateToDateTime(note.Created);
