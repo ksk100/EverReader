@@ -48,5 +48,10 @@ namespace EverReader.DataAccess
             _dbContext.SaveChanges();
         }
 
+        public List<Bookmark> GetRecentlyRead(string userId)
+        {
+            return _dbContext.Bookmarks.Where(b => (b.UserId == userId) && b.Type == BookmarkType.Automatic).OrderByDescending(b => b.Updated).ToList();
+        }
+
     }
 }

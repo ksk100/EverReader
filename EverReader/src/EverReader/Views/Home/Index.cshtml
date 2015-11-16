@@ -7,7 +7,7 @@
         <li data-target="#myCarousel" data-slide-to="0" class="active"></li>
         <li data-target="#myCarousel" data-slide-to="1"></li>
         <li data-target="#myCarousel" data-slide-to="2"></li>
-        <li data-target="#myCarousel" data-slide-to="3"></li>
+        @*<li data-target="#myCarousel" data-slide-to="3"></li>*@
     </ol>
     <div class="carousel-inner" role="listbox">
         <div class="item active">
@@ -15,10 +15,7 @@
             <div class="container">
                 <div class="carousel-caption">
                     <p>
-                        Learn how to build ASP.NET apps that can run anywhere.
-                        <a class="btn btn-default btn-default" href="http://go.microsoft.com/fwlink/?LinkID=525028&clcid=0x409">
-                            Learn More
-                        </a>
+                        Read your long-form Evernote content
                     </p>
                 </div>
             </div>
@@ -28,10 +25,7 @@
             <div class="container">
                 <div class="carousel-caption">
                     <p>
-                        There are powerful new features in Visual Studio for building modern web apps.
-                        <a class="btn btn-default btn-default" href="http://go.microsoft.com/fwlink/?LinkID=525030&clcid=0x409">
-                            Learn More
-                        </a>
+                        Automatically saves reading position
                     </p>
                 </div>
             </div>
@@ -41,15 +35,12 @@
             <div class="container">
                 <div class="carousel-caption">
                     <p>
-                        Bring in libraries from NuGet, Bower, and npm, and automate tasks using Grunt or Gulp.
-                        <a class="btn btn-default btn-default" href="http://go.microsoft.com/fwlink/?LinkID=525029&clcid=0x409">
-                            Learn More
-                        </a>
+                        Create custom bookmarks for each document
                     </p>
                 </div>
             </div>
         </div>
-        <div class="item">
+        @*<div class="item">
             <img src="~/images/Banner-01-Azure.png" alt="Microsoft Azure" class="img-responsive" />
             <div class="container">
                 <div class="carousel-caption">
@@ -61,7 +52,7 @@
                     </p>
                 </div>
             </div>
-        </div>
+        </div>*@
     </div>
 </div>
 
@@ -72,14 +63,16 @@
             <li>Read long content in Evernote</li>
             <li>Pick up where you left off</li>
             <li>Create bookmarks to mark places</li>
-            <li>Change reading environment without affecting note content</li>
+            <li>Leaves your notes untouched</li>
         </ul>
     </div>
     <div class="col-md-3">
         <h2>Get started</h2>
-        <ul>
+        <ol>
+            <li><a asp-controller="Account" asp-action="Register">Register and login</a></li>
+            <li><a asp-controller="Manage" asp-action="AuthoriseEvernote">Authorise Evernote</a></li>
             <li><a asp-controller="Reader" asp-action="Index">Find notes to read</a></li>
-        </ul>
+        </ol>
     </div>
     <div class="col-md-3">
 

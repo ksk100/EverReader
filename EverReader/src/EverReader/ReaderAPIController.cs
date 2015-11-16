@@ -37,12 +37,11 @@ namespace EverReader
         }
 
         // PUT api/reading/{guid}
-        [HttpPut("{guid}")]
+        [HttpPut("{guid:guid}")]
         public async Task<JsonResult> Put(string guid, decimal percentageRead)
         {
             string currentUserId = HttpContext.User.GetUserId();
             Dictionary<string, object> response = new Dictionary<string, object>();
-            string output = "";
 
             ApplicationUser user = await ControllerHelpers.GetCurrentUserAsync(_userManager, _dataAccess, currentUserId);
 
@@ -62,7 +61,8 @@ namespace EverReader
                 {
                     NoteGuid = guid,
                     Type = BookmarkType.Automatic,
-                    UserId = currentUserId
+                    UserId = currentUserId,
+                    Updated = DateTime.Now
                 };
             }
 

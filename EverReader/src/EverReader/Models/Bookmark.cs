@@ -18,5 +18,11 @@ namespace EverReader.Models
         public BookmarkType Type { get; set; }
 
         public DateTime Updated { get; set; }
+
+        public string NoteTitle { get; set; }
+
+        public DateTime NoteCreated { get; set; }
+
+        public DateTime NoteUpdated { get; set; }
     }
 }

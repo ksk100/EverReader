@@ -1,0 +1,47 @@
+﻿@model EverReader.ViewModels.Reader.RecentlyReadViewModel
+@using EverReader.Utility
+
+@{
+    ViewBag.Title = "Recently read notes";
+}
+
+<h2>@ViewData["Title"]</h2>
+<div class="row">
+    <div class="col-md-12">
+        @if (Model.RecentlyReadNotes != null)
+        {
+            <section>
+                <table class="table table-striped">
+                    <tr>
+                        <th></th>
+                        <th>Note title</th>
+                        <th>Last read</th>
+                        <th>Progress</th>
+                        <th>Length</th>
+                        <th>Note created</th>
+                        <th>Note updated</th>
+                    </tr>
+                    @foreach (var item in Model.RecentlyReadNotes)
+                {
+                        <tr>
+                            <td>
+                                <a asp-action="Read" asp-controller="Reader" asp-route-guid="@item.NoteGuid">Read</a>
+                            </td>
+                            <td>
+                                <strong>@Html.Raw(item.NoteTitle)</strong>
+                            </td>
+                            <td>@FormattingHelper.GetPrettyDate(item.Updated)</td>
+                            <td style="text-align: right">@item.PercentageRead%</td>
+                            <td></td>
+                            <td>@item.NoteCreated.ToShortDateString()</td>
+                            <td>@item.NoteUpdated.ToShortDateString()</td>
+                        </tr>
+                    }
+                </table>
+            </section>
+        }
+
+    </div>
+</div>
+
+

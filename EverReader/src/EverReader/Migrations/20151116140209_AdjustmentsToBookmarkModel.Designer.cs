@@ -8,9 +8,10 @@ using EverReader.Models;
 namespace EverReader.Migrations
 {
     [DbContext(typeof(EverReaderContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20151116140209_AdjustmentsToBookmarkModel")]
+    partial class AdjustmentsToBookmarkModel
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
             modelBuilder
                 .Annotation("ProductVersion", "7.0.0-beta8-15964")
@@ -72,8 +73,6 @@ namespace EverReader.Migrations
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd();
-
-                    b.Property<DateTime>("NoteCreated");
 
                     b.Property<string>("NoteGuid");
 

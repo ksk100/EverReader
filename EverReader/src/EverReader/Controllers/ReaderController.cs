@@ -12,6 +12,7 @@ using System.Security.Claims;
 using EverReader.Services;
 using Evernote.EDAM.Type;
 using System.Net;
+using EverReader.Utility;
 
 namespace EverReader.Controllers
 {
@@ -91,6 +92,13 @@ namespace EverReader.Controllers
 
             Bookmark bookmark = _dataAccess.GetAutomaticBookmark(currentUserId, guid);
 
+            // update all the note metadata we store
+            bookmark.NoteTitle = note.Title;
+            bookmark.NoteCreated = EvernoteSDKHelper.ConvertEvernoteDateToDateTime(note.Created);
+            bookmark.NoteUpdated = EvernoteSDKHelper.ConvertEvernoteDateToDateTime(note.Updated);
+            _dataAccess.SaveBookmark(bookmark);
+
+            // Create view model for page
             ReaderViewModel readerViewModel = new ReaderViewModel()
             {
                 Title = note.Title,
@@ -102,9 +110,18 @@ namespace EverReader.Controllers
             return View(readerViewModel);
         }
 
-        public string RecentlyRead()
+        public async Task<IActionResult> RecentlyRead()
         {
-            return "To implement";
+            string currentUserId = HttpContext.User.GetUserId();
+            ApplicationUser user = await ControllerHelpers.GetCurrentUserAsync(_userManager, _dataAccess, currentUserId);
+            if (user.EvernoteCredentials == null)
+            {
+                return View("MustAuthoriseEvernote");
+            }
+
+            List<Bookmark> bookmarks = _dataAccess.GetRecentlyRead(currentUserId);
+
+            return View(new RecentlyReadViewModel() { RecentlyReadNotes = bookmarks });
         }
     }
 }

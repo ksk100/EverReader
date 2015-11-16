@@ -17,5 +17,7 @@ namespace EverReader.DataAccess
         Bookmark GetAutomaticBookmark(string userId, string guid);
 
         void SaveBookmark(Bookmark bookmark);
+
+        List<Bookmark> GetRecentlyRead(string userId);
     }
 }
