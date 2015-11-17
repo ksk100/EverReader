@@ -57,17 +57,30 @@
 </div>
 
 <div class="row">
-    <div class="col-md-3">
+    <div class="col-md-4">
         <h2>Features</h2>
         <ul>
             <li>Read long content in Evernote</li>
             <li>Pick up where you left off</li>
-            <li>Create bookmarks to mark places</li>
+            <li>Create bookmarks to mark places (coming very soon!)</li>
             <li>Leaves your notes untouched</li>
         </ul>
     </div>
-    <div class="col-md-3">
+    <div class="col-md-4">
+        <h2>Screenshot tour</h2>
+        <p>
+            <a class="fancybox" rel="group" href="~/images/screenshot-00.png" caption="The Find Notes screen"><img src="~/images/screenshot-00-small.png" /></a>
+            <div class="hidden">
+                <a class="fancybox" rel="group" href="~/images/screenshot-01.png" caption="Reading an article: Wood - What ISIS Really Want (The Atlantic)"><img src="~/images/screenshot-00-small.png" /></a>
+                <a class="fancybox" rel="group" href="~/images/screenshot-02.png" caption="The Recently Read screen"><img src="~/images/screenshot-00-small.png" /></a>
+            </div>
+        </p>
+        <p>Click the screenshot for a tour.</p>
+    </div>
+    <div class="col-md-4">
         <h2>Get started</h2>
+        <p>EverReader is currently in Private Beta.</p>
+        <p>If you've received an invitation, then:</p>
         <ol>
             <li><a asp-controller="Account" asp-action="Register">Register and login</a></li>
             <li><a asp-controller="Manage" asp-action="AuthoriseEvernote">Authorise Evernote</a></li>
@@ -77,7 +90,19 @@
     <div class="col-md-3">
 
     </div>
-    <div class="col-md-3">
-
-    </div>
 </div>
+
+@section scripts {
+
+<script src="~/lib/fancybox/source/jquery.fancybox.js"></script>
+
+<script type="text/javascript">
+	$(document).ready(function() {
+	    $(".fancybox").fancybox({
+	        beforeLoad: function () {
+	            this.title = $(this.element).attr('caption');
+	        }
+	    });
+	});
+</script>
+}

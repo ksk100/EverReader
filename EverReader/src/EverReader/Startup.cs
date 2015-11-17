@@ -18,6 +18,7 @@ using Microsoft.Framework.Logging;
 using EverReader.Models;
 using EverReader.Services;
 using EverReader.DataAccess;
+using Microsoft.AspNet.Diagnostics;
 
 namespace EverReader
 {
@@ -99,6 +100,9 @@ namespace EverReader
                 // Add Error handling middleware which catches all application specific errors and
                 // sends the request to the following path or controller action.
                 app.UseExceptionHandler("/Home/Error");
+
+                // app.UseDeveloperExceptionPage();
+                // app.UseDatabaseErrorPage(DatabaseErrorPageOptions.ShowAll);
             }
 
             // Add the platform handler to the request pipeline.
