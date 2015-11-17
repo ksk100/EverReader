@@ -11,6 +11,7 @@ namespace EverReader.ViewModels.Reader
     public class FindNotesViewModel
     {
         [Display(Name="Search")]
+        [Required(ErrorMessage = "Please enter a search string")]
         public string SearchField { get; set; }
 
         [Display(Name="Exclude short notes?")]

@@ -52,14 +52,17 @@ namespace EverReader.Controllers
             {
                 return View("MustAuthoriseEvernote");
             }
-            IEvernoteService evernoteService = new EvernoteServiceSDK1(user.EvernoteCredentials);
-            try
+            if (ModelState.IsValid)
             {
-                findNotesViewModel.SearchResults = evernoteService.GetNotesMetaList(findNotesViewModel.SearchField);
-            }
-            catch (EvernoteServiceSDK1AuthorisationException)
-            {
-                return View("EvernoteAuthorisationError");
+                IEvernoteService evernoteService = new EvernoteServiceSDK1(user.EvernoteCredentials);
+                try
+                {
+                    findNotesViewModel.SearchResults = evernoteService.GetNotesMetaList(findNotesViewModel.SearchField);
+                }
+                catch (EvernoteServiceSDK1AuthorisationException)
+                {
+                    return View("EvernoteAuthorisationError");
+                }
             }
             return View("FindNotes", findNotesViewModel);
         }
@@ -104,6 +107,7 @@ namespace EverReader.Controllers
 
             // update all the note metadata we store
             bookmark.NoteTitle = note.Title;
+            bookmark.NoteLength = note.ContentLength;
             bookmark.NoteCreated = EvernoteSDKHelper.ConvertEvernoteDateToDateTime(note.Created);
             bookmark.NoteUpdated = EvernoteSDKHelper.ConvertEvernoteDateToDateTime(note.Updated);
             _dataAccess.SaveBookmark(bookmark);

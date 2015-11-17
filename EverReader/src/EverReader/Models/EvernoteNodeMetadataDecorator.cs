@@ -47,12 +47,36 @@ namespace EverReader.Models
                 {
                     switch (BaseNoteMetadata.Attributes.Source)
                     {
+                        case "mobile.android":
+                            return "Android";
+                        case "mail.clip":
+                            return "Clipped from email";
+                        case "mail.smtp":
+                            return "Emailed in";
                         case "web.clip":
                             return "Web clipping";
                         default:
                             return BaseNoteMetadata.Attributes.Source;
                     }
                 }
+            }
+        }
+
+        public string ContentLength
+        {
+            get
+            {
+                if (BaseNoteMetadata.ContentLength > (1024 * 1024))
+                {
+                    decimal sizeInMb = (decimal)BaseNoteMetadata.ContentLength / (1024 * 1024);
+                    return sizeInMb.ToString(".#") + " Mb";
+                }
+                if (BaseNoteMetadata.ContentLength > 1024 * 2)
+                {
+                    int sizeInKb = BaseNoteMetadata.ContentLength / 1024;
+                    return sizeInKb + " Kb";
+                }
+                return BaseNoteMetadata.ContentLength + " bytes";
             }
         }
 

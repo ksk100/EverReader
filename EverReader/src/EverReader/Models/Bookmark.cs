@@ -24,5 +24,25 @@ namespace EverReader.Models
         public DateTime NoteCreated { get; set; }
 
         public DateTime NoteUpdated { get; set; }
+
+        public int NoteLength { get; set; }
+
+        public string NoteLengthPretty
+        {
+            get
+            {
+                if (NoteLength > (1024 * 1024))
+                {
+                    decimal sizeInMb = (decimal)NoteLength / (1024 * 1024);
+                    return sizeInMb.ToString(".#") + " Mb";
+                }
+                if (NoteLength > 1024 * 2)
+                {
+                    int sizeInKb = NoteLength / 1024;
+                    return sizeInKb + " Kb";
+                }
+                return NoteLength + " bytes";
+            }
+        }
     }
 }

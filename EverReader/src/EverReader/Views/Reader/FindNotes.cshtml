@@ -11,7 +11,7 @@
             <form asp-controller="Reader" asp-action="Index" method="post" class="form-horizontal" role="form">
                 <h4>Search for notes to begin reading</h4>
                 <hr />
-                <div asp-validation-summary="ValidationSummary.All" class="text-danger"></div>
+                @*<div asp-validation-summary="ValidationSummary.All" class="text-danger"></div>*@
                 <div class="form-group">
                     <label asp-for="SearchField" class="col-md-2 control-label"></label>
                     <div class="col-md-10">
@@ -33,9 +33,9 @@
                 <tr>
                     <th></th>
                     <th>Note title</th>
+                    <th>Length</th>
                     <th>Created</th>
                     <th>Updated</th>
-                    <th>Length</th>
                 </tr>
                 @foreach (var item in Model.SearchResults)
                 {
@@ -64,9 +64,9 @@
                             <small>@item.BaseNoteMetadata.Attributes.SourceApplication</small>
                         }
                     </td>
+                    <td>@item.ContentLength</td>
                     <td>@item.CreatedDateTime.ToShortDateString()</td>
                     <td>@item.UpdatedDateTime.ToShortDateString()</td>
-                    <td>@item.BaseNoteMetadata.ContentLength</td>
                 </tr>
                 }
             </table>
