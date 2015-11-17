@@ -1,0 +1,14 @@
+﻿@{
+    ViewBag.Title = "Bookmark not found";
+}
+<h2>@ViewData["Title"]</h2>
+
+<div class="row">
+    <div class="col-md-12">
+        <section>
+            <h4>The requested bookmark could not be found</h4>
+            <h5>Perhaps you've deleted it in another browser window?</h5>
+            <h5>Head back to the <a asp-action="Index" asp-controller="Reader">search form</a> or to your <a asp-action="RecentlyRead" asp-controller="Reader">recently read notes</a>.</h5>
+        </section>
+    </div>
+</div>

@@ -137,5 +137,33 @@ namespace EverReader.Controllers
 
             return View(new RecentlyReadViewModel() { RecentlyReadNotes = bookmarks });
         }
+
+        [HttpPost]
+        [Route("Reader/DeleteBookmark/{id:int}")]
+        public async Task<IActionResult> DeleteBookmark(int id)
+        {
+            string currentUserId = HttpContext.User.GetUserId();
+            ApplicationUser user = await ControllerHelpers.GetCurrentUserAsync(_userManager, _dataAccess, currentUserId);
+            if (user.EvernoteCredentials == null)
+            {
+                return View("MustAuthoriseEvernote");
+            }
+
+            // checks
+            Bookmark bookmark = _dataAccess.GetBookmarkById(id);
+            if (bookmark == null)
+            {
+                return View("BookmarkNotFoundError");
+            }
+            if (bookmark.UserId != currentUserId)
+            {
+                return HttpBadRequest();
+            }
+
+            // delete bookmark
+            _dataAccess.DeleteBookmark(bookmark);
+
+            return RedirectToAction("RecentlyRead");
+        }
     }
 }

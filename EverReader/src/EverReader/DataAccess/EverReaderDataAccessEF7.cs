@@ -36,6 +36,10 @@ namespace EverReader.DataAccess
             _dbContext.SaveChanges();
         }
 
+        public Bookmark GetBookmarkById(int id)
+        {
+            return _dbContext.Bookmarks.SingleOrDefault(b => (b.Id == id));
+        }
 
         public Bookmark GetAutomaticBookmark(string userId, string guid)
         {
@@ -45,6 +49,12 @@ namespace EverReader.DataAccess
         public void SaveBookmark(Bookmark bookmark)
         {
             _dbContext.Bookmarks.Update(bookmark);
+            _dbContext.SaveChanges();
+        }
+
+        public void DeleteBookmark(Bookmark bookmark)
+        {
+            _dbContext.Bookmarks.Remove(bookmark);
             _dbContext.SaveChanges();
         }
 

@@ -14,9 +14,13 @@ namespace EverReader.DataAccess
 
         void UpdateEvernoteCredentials(EFDbEvernoteCredentials evernoteCredentials);
 
+        Bookmark GetBookmarkById(int id);
+
         Bookmark GetAutomaticBookmark(string userId, string guid);
 
         void SaveBookmark(Bookmark bookmark);
+
+        void DeleteBookmark(Bookmark bookmark);
 
         List<Bookmark> GetRecentlyRead(string userId);
     }
