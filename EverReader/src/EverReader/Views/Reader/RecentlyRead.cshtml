@@ -13,29 +13,25 @@
             <section>
                 <table class="table table-striped">
                     <tr>
-                        <th></th>
                         <th>Note title</th>
                         <th>Last read</th>
                         <th>Progress</th>
-                        <th>Length</th>
-                        <th>Note created</th>
-                        <th>Note updated</th>
+                        <th class="hidden-xs">Length</th>
+                        <th class="hidden-xs hidden-sm">Note created</th>
+                        <th class="hidden-xs">Note updated</th>
                         <th></th>
                     </tr>
                     @foreach (var item in Model.RecentlyReadNotes)
                 {
                         <tr>
                             <td>
-                                <a asp-action="Read" asp-controller="Reader" asp-route-guid="@item.NoteGuid">Read</a>
-                            </td>
-                            <td>
-                                <strong>@Html.Raw(item.NoteTitle)</strong>
+                                <strong><a asp-action="Read" asp-controller="Reader" asp-route-guid="@item.NoteGuid">@Html.Raw(item.NoteTitle)</a></strong>
                             </td>
                             <td>@FormattingHelper.GetPrettyDate(item.Updated)</td>
                             <td style="text-align: right">@item.PercentageRead%</td>
-                            <td>@item.NoteLengthPretty</td>
-                            <td>@item.NoteCreated.ToShortDateString()</td>
-                            <td>@item.NoteUpdated.ToShortDateString()</td>
+                            <td class="hidden-xs">@item.NoteLengthPretty</td>
+                            <td class="hidden-xs hidden-sm">@item.NoteCreated.ToShortDateString()</td>
+                            <td class="hidden-xs">@item.NoteUpdated.ToShortDateString()</td>
                             <td>
                                 <form asp-action="DeleteBookmark" asp-controller="Reader" asp-route-id="@item.Id" style="display: inline">
                                     <button class="btn btn-xs btn-danger" type="submit" onclick="return window.confirm('Are you sure you want to delete this bookmark?');">

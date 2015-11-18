@@ -28,9 +28,9 @@ $(document).ready(function () {
 
             // if we are still at the same position (after 0.7 seconds), and position is after last saved, then save the bookmark
             if (docHeight == savedDocHeight && winHeight == savedWinHeight && winScrollTop == savedWinScrollTop && winScrollTop > lastSavedScrollTop) {
-                // var d = moment().format("h:mm:ss.SS");
-                // console.log("firing save event: " + d);
-                // console.log("docHeight: " + savedDocHeight + ", winHeight: " + savedWinHeight + ", winScrollTop: " + savedWinScrollTop);
+                //var d = moment().format("h:mm:ss.SS");
+                //console.log("firing save event: " + d);
+                //console.log("docHeight: " + savedDocHeight + ", winHeight: " + savedWinHeight + ", winScrollTop: " + savedWinScrollTop);
 
                 var documentScrollPercent = ((savedWinScrollTop) / (savedDocHeight - savedWinHeight)) * 100;
 
@@ -49,10 +49,10 @@ $(document).ready(function () {
             // if we would save, but the scroll position is higher up the page (user is scrolling up), then set a timeout to reset the lastSavedScrollTop
             if (docHeight == savedDocHeight && winHeight == savedWinHeight && winScrollTop == savedWinScrollTop &&
                 lastSavedScrollTop > winScrollTop && lastSavedScrollTopResetTimerSet == 0) {
-                // console.log("not saving now, but setting timer to reset scroll position.  saving will resume in 5 seconds");
+                //console.log("not saving now, but setting timer to reset scroll position.  saving will resume in 5 seconds");
                 lastSavedScrollTopResetTimerSet = 1;
                 setTimeout(function () {
-                    // console.log("resetting lastSavedScrollTop, so saving will start working again");
+                    //console.log("resetting lastSavedScrollTop, so saving will start working again");
                     lastSavedScrollTop = 0;
                     lastSavedScrollTopResetTimerSet = 0;
                 }, 5000);

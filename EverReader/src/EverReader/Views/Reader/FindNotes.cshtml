@@ -31,20 +31,16 @@
         <section>
             <table class="table table-striped">
                 <tr>
-                    <th></th>
                     <th>Note title</th>
                     <th>Length</th>
-                    <th>Created</th>
-                    <th>Updated</th>
+                    <th class="hidden-xs hidden-sm">Created</th>
+                    <th class="hidden-xs">Updated</th>
                 </tr>
                 @foreach (var item in Model.SearchResults)
                 {
                 <tr>
                     <td>
-                        <a asp-action="Read" asp-controller="Reader" asp-route-guid="@item.BaseNoteMetadata.Guid">Read</a>
-                    </td>
-                    <td>
-                        <strong>@item.Title</strong>
+                        <strong><a asp-action="Read" asp-controller="Reader" asp-route-guid="@item.BaseNoteMetadata.Guid">@item.Title</a></strong>
                         @if (!String.IsNullOrWhiteSpace(item.Source))
                         {
                             <br />
@@ -65,8 +61,8 @@
                         }
                     </td>
                     <td>@item.ContentLength</td>
-                    <td>@item.CreatedDateTime.ToShortDateString()</td>
-                    <td>@item.UpdatedDateTime.ToShortDateString()</td>
+                    <td class="hidden-xs hidden-sm">@item.CreatedDateTime.ToShortDateString()</td>
+                    <td class="hidden-xs">@item.UpdatedDateTime.ToShortDateString()</td>
                 </tr>
                 }
             </table>
