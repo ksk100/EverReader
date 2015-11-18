@@ -49,13 +49,13 @@ $(document).ready(function () {
             // if we would save, but the scroll position is higher up the page (user is scrolling up), then set a timeout to reset the lastSavedScrollTop
             if (docHeight == savedDocHeight && winHeight == savedWinHeight && winScrollTop == savedWinScrollTop &&
                 lastSavedScrollTop > winScrollTop && lastSavedScrollTopResetTimerSet == 0) {
-                //console.log("not saving now, but setting timer to reset scroll position.  saving will resume in 5 seconds");
+                //console.log("not saving now, but setting timer to reset scroll position.  saving will resume in 4 seconds");
                 lastSavedScrollTopResetTimerSet = 1;
                 setTimeout(function () {
                     //console.log("resetting lastSavedScrollTop, so saving will start working again");
                     lastSavedScrollTop = 0;
                     lastSavedScrollTopResetTimerSet = 0;
-                }, 5000);
+                }, 4000);
             }
 
         }, 700);
