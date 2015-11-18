@@ -11,9 +11,27 @@ At the moment, there is no public hosted version of EverReader available.  To ru
 3. Ask for the developer key to be activated on the production server (so you can access your actual notes)
 4. Use Visual Studio 2015 to run the web application.
 
-A hosted version will hopefully be rolled out in due course.  
+A hosted version runs at [http://everreader.azurewebsites.net](http://everreader.azurewebsites.net).  This is currently private beta, but you can request access by sending me an email. 
 
 ## Architecture
 
 EverReader runs on ASP.NET 5 (developed using beta8) and is written in `C#` and `Javascript`.
+
+## Screenshots
+
+### The welcome screen:
+
+![](http://everreader.azurewebsites.net/images/screenshot-03.png)
+
+### The find notes screen:
+
+![](http://everreader.azurewebsites.net/images/screenshot-00.png)
+
+### The reader screen:
+
+![](http://everreader.azurewebsites.net/images/screenshot-01.png)
+
+### The recently read screen:
+
+![](http://everreader.azurewebsites.net/images/screenshot-02.png)
 
