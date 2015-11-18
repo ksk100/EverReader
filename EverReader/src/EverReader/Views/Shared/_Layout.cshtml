@@ -22,25 +22,55 @@
             <link href="~/lib/fancybox/source/jquery.fancybox.css" rel="stylesheet">
         </environment>
     </head>
-    <body>
-        <div class="navbar navbar-inverse navbar-fixed-top">
-            <div class="container">
-                <div class="navbar-collapse collapse">
-                    <ul class="nav navbar-nav">
-                        <li><a asp-controller="Home" asp-action="Index" class="navbar-brand">EverReader</a></li>
+<body>
+    <div class="container">
+        <header>
+            <nav class="navbar navbar-inverse navbar-fixed-top">
+                <div class="container">
+                    <div class="navbar-header">
+                        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                            <span class="icon-bar"></span>
+                            <span class="icon-bar"></span>
+                            <span class="icon-bar"></span>
+                        </button>
+                        <a asp-controller="Home" asp-action="Index" class="navbar-brand">EverReader</a>
+                    </div>
+                    <div class="navbar-collapse collapse">
+                        <ul class="nav navbar-nav">
+                            @if (User.Identity.IsAuthenticated)
+                            {
+                                <li><a asp-controller="Reader" asp-action="Index">Find notes</a></li>
+                                <li><a asp-controller="Reader" asp-action="RecentlyRead">Recently read notes</a></li>
+                            }
+                            <li><a class="hidden-sm" asp-controller="Home" asp-action="About">About</a></li>
+                            <li><a class="hidden-sm" asp-controller="Home" asp-action="Contact">Contact</a></li>
+                        </ul>
+                        @await Html.PartialAsync("_LoginPartial")
+                    </div>
+                </div>
+            </nav>
+        </header>
+    </div>
+        @*<div class="container">
+            <div class="navbar navbar-inverse navbar-fixed-top">
+                <div class="container">
+                    <div class="navbar-collapse collapse">
+                        <ul class="nav navbar-nav">
+                            <li><a asp-controller="Home" asp-action="Index" class="navbar-brand">EverReader</a></li>
 
-@if (User.Identity.IsAuthenticated)
-{
-                        <li><a asp-controller="Reader" asp-action="Index">Find notes</a></li>
-                        <li><a asp-controller="Reader" asp-action="RecentlyRead">Recently read notes</a></li>
-}
-                        <li><a asp-controller="Home" asp-action="About">About</a></li>
-                        <li><a asp-controller="Home" asp-action="Contact">Contact</a></li>
-                    </ul>
-                    @await Html.PartialAsync("_LoginPartial")
+                            @if (User.Identity.IsAuthenticated)
+                            {
+                                <li><a asp-controller="Reader" asp-action="Index">Find notes</a></li>
+                                        <li><a asp-controller="Reader" asp-action="RecentlyRead">Recently read notes</a></li>
+                            }
+                            <li class="hidden-xs hidden-sm"><a asp-controller="Home" asp-action="About">About</a></li>
+                            <li class="hidden-xs hidden-sm"><a asp-controller="Home" asp-action="Contact">Contact</a></li>
+                        </ul>
+                        @await Html.PartialAsync("_LoginPartial")
+                    </div>
                 </div>
             </div>
-        </div>
+        </div>*@
         <div class="container body-content">
             @RenderBody()
             <hr />
@@ -77,5 +107,5 @@
         </environment>
 
         @RenderSection("scripts", required: false)
-    </body>
+</body>
 </html>
