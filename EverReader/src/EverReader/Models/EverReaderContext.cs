@@ -12,6 +12,7 @@ namespace EverReader.Models
         public DbSet<ApplicationUser> ApplicationUsers { get; set; }
         public DbSet<EFDbEvernoteCredentials> EvernoteCredentials { get; set; }
         public DbSet<Bookmark> Bookmarks { get; set; }
+        public DbSet<PrivateBetaUser> PrivateBetaUsers { get; set; }
 
         protected override void OnModelCreating(ModelBuilder builder)
         {

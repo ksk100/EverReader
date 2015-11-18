@@ -102,6 +102,17 @@ namespace EverReader.Controllers
         public async Task<IActionResult> Register(RegisterViewModel model)
         {
             EnsureDatabaseCreated(_applicationDbContext);
+
+            List<string> permittedEmails = _applicationDbContext.PrivateBetaUsers.Select(b => b.Email).ToList();
+
+            if (model.Email != null)
+            {
+                if (!permittedEmails.Contains(model.Email))
+                {
+                    ModelState.AddModelError("", "EverReader is currently in private beta; to request access, please email simon@kittle.co.uk");
+                }
+            }
+
             if (ModelState.IsValid)
             {
                 var user = new ApplicationUser { UserName = model.Email, Email = model.Email };
