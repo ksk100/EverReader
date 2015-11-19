@@ -15,8 +15,13 @@
                 <div class="form-group">
                     <label asp-for="SearchField" class="col-md-2 control-label"></label>
                     <div class="col-md-10">
-                        <input asp-for="SearchField" class="form-control" />
-                        <span asp-validation-for="SearchField" class="text-danger"></span>
+                        <div class="input-group">
+                            <span class="input-group-addon">
+                                <span class="glyphicon glyphicon-search"></span>
+                            </span>
+                            <input asp-for="SearchField" class="form-control" />
+                            <span asp-validation-for="SearchField" class="text-danger"></span>
+                        </div>
                     </div>
                 </div>
                 <div class="form-group">
@@ -29,7 +34,7 @@
 @if (Model.SearchResults != null)
 {
         <section>
-            <table class="table table-striped">
+            <table class="table table-striped table-responsive">
                 <tr>
                     <th>Note title</th>
                     <th>Length</th>

@@ -13,6 +13,7 @@ using EverReader.Services;
 using Evernote.EDAM.Type;
 using System.Net;
 using EverReader.Utility;
+using System.Text.RegularExpressions;
 
 namespace EverReader.Controllers
 {
@@ -112,11 +113,17 @@ namespace EverReader.Controllers
             bookmark.NoteUpdated = EvernoteSDKHelper.ConvertEvernoteDateToDateTime(note.Updated);
             _dataAccess.SaveBookmark(bookmark);
 
+            string decodedContent = WebUtility.HtmlDecode(note.Content);
+
+            decodedContent = Regex.Replace(decodedContent, 
+                "<a href=\"evernote:///view/[^/]+/[^/]+/[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}/([0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12})/", 
+                "<a href=\"/Reader/Read/$1");
+
             // Create view model for page
             ReaderViewModel readerViewModel = new ReaderViewModel()
             {
                 Title = note.Title,
-                Content = WebUtility.HtmlDecode(note.Content),
+                Content = decodedContent,
                 NoteGuid = note.Guid,
                 PercentageRead = bookmark == null ? 0 : bookmark.PercentageRead
             };
