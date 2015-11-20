@@ -39,7 +39,8 @@
                             @if (User.Identity.IsAuthenticated)
                             {
                                 <li><a asp-controller="Reader" asp-action="Index">Find notes</a></li>
-                                <li><a asp-controller="Reader" asp-action="RecentlyRead">Recently read notes</a></li>
+                                <li><a asp-controller="Reader" asp-action="RecentlyRead">Recently read</a></li>
+                                <li><a asp-controller="Reader" asp-action="Pinned">Pinned notes</a></li>
                             }
                             <li><a class="hidden-sm" asp-controller="Home" asp-action="About">About</a></li>
                             <li><a class="hidden-sm" asp-controller="Home" asp-action="Contact">Contact</a></li>

@@ -7,6 +7,8 @@ namespace EverReader.Models
 {
     public enum BookmarkType
     {
-        Automatic
+        Automatic,
+        Pinned,
+        Manual
     }
 }
