@@ -21,10 +21,11 @@
     </div>
 </div>
 
+<br /><br />
 <div class="navbar-inverse navbar-fixed-bottom">
     <div class="container">
         <div class="cols-xs-6 pull-left">
-            <a href="#" onclick="window.history.back(); return false" style="color: #999">Back</a>
+            <a class="navbar-inverse-text-color" data-bind="contextMenu: bookmarks, bindMenuOnClick: true, bindMenuOnContextMenu: false">Bookmarks</a>
         </div>
         <div class="cols-xs-6 pull-right">
             <span id="positionReport" style="color: #999"></span>
@@ -33,12 +34,34 @@
 </div>
 
 @section scripts {
+
+<script id="poprItemTemplate" type="text/html">
+    <button data-bind="click: function() { alert('hi'); }">asdasd<div class="popr-item">[<span data-bind="text: percent"></span>%] <span data-bind="text: title"></span></div></button>
+</script>
+
     <script type="text/javascript">
         var noteGuid = "@Model.NoteGuid";
         var percentageRead = @Model.PercentageRead;
     </script>
-    <script src="~/lib/bootstrap/js/affix.js"></script>
+    <script src="~/lib/knockout/dist/knockout.debug.js"></script>
+    <script src="~/lib/knockout.contextmenu/dist/js/knockout.contextmenu.js"></script>
+    <script src="~/lib/bootstrap/js/affix.js"></script> <!-- unused at mo -->
     <script src="~/lib/moment/moment.js"></script>
     <script src="~/js/reader.js"></script>
+    
     <link rel="stylesheet" href="~/css/reader.css" />
+    <link rel="stylesheet" href="~/lib/knockout.contextmenu/dist/css/knockout.contextmenu.min.css" />
+
+    <script>
+        var readerViewModel = {
+            bookmarks : ko.observableArray([ 
+                { action : function () { navigateToPosition(5) }, percent: 5, text: "Prototypes"}, 
+                { action : function () { navigateToPosition(16) }, percent: 16, text: "Mixins" }])
+        };
+
+        ko.applyBindings(readerViewModel);
+
+        // TODO: API call to load bookmarks
+
+    </script>
 }

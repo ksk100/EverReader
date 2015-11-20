@@ -9,6 +9,8 @@
     "jquery-validation": "1.11.1",
     "jquery-validation-unobtrusive": "3.2.2",
     "moment": "*",
-    "fancybox" : "2.1.5"
+    "fancybox": "2.1.5",
+    "knockout": "3.4.0",
+    "knockout.contextmenu" : "*"
   }
 }
