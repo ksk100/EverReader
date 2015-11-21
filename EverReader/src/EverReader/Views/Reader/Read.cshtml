@@ -23,15 +23,10 @@
 
 <div class="navbar-inverse navbar-fixed-bottom">
     <div class="container">
-        <div class="cols-xs-8 cols-sm-8 cols-md-8 pull-left">
-            <div class="cols-xs-4 cols-sm-4 cols-md-4 pull-left">
-                <a class="navbar-inverse-text-color" id="addBookmark" href="#">Add bookmark</a>
-            </div>
-            <div class="cols-xs-4 cols-sm-4 cols-md-4 pull-right">
-                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                <a class="navbar-inverse-text-color" href="#" data-bind="contextMenu: bookmarks, bindMenuOnClick: true, bindMenuOnContextMenu: false">Bookmarks</a>
-            </div>
-       </div>
+        <div class="btn-toolbar cols-xs-8 cols-sm-8 cols-md-8 pull-left" role="toolbar">
+            <button type="button" class="btn btn-default btn-xs" id="addBookmark">Add bookmark</button>
+            <button type="button" class="btn btn-default btn-xs" data-bind="contextMenu: bookmarks, bindMenuOnClick: true, bindMenuOnContextMenu: false">Bookmarks</button>
+        </div>
         <div class="cols-xs-4 cols-sm-4 cols-md-4 pull-right">
             <span id="positionReport" class="navbar-inverse-text-color pull-left"></span><span class="navbar-inverse-text-color hidden-xs pull-right">&nbsp;through document</span>
         </div>
