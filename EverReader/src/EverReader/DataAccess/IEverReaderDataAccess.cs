@@ -23,5 +23,7 @@ namespace EverReader.DataAccess
         void DeleteBookmark(Bookmark bookmark);
 
         List<Bookmark> GetRecentlyRead(string userId);
+
+        List<Bookmark> GetManualBookmarks(string userId, string guid);
     }
 }

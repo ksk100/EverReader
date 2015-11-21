@@ -96,23 +96,31 @@ function bindContextMenu(ko, document) {
                 var menuElement;
 
                 activeElement = getMenu(event);
+                console.log(activeElement);
                 menuElement = activeElement.element;
 
                 hideCurrentMenu();
 
+                // make visibility hidden, then add to DOM so that we can get the height/width of the menu
+                menuElement.style.visibility = "hidden";
+                (document.body || document).appendChild(menuElement);
+
                 // set location
                 if (event) {
                     var bottomOfViewport = window.innerHeight + window.pageYOffset;
-                    console.log(bottomOfViewport);
-                    console.log(mouseY(event));
+
+                    console.log("bottom of viewport: " + bottomOfViewport);
+                    console.log("mouse evntY: " + mouseY(event));
                     console.log(menuElement.offsetHeight + ", " + menuElement.clientHeight + ", " + menuElement.scrollHeight);
                     console.log(mouseY(event) + menuElement.offsetHeight);
 
                     // check it's not off bottom screen
                     if (mouseY(event) + menuElement.offsetHeight > bottomOfViewport) {
+                        // console.log("off bottom of screen");
+                        // console.log("settin top to: " + (1 * (bottomOfViewport - menuElement.offsetHeight - 10)));
                         menuElement.style.top = 1 * (bottomOfViewport - menuElement.offsetHeight - 10) + 'px';
                     } else {
-                        menuElement.style.top = (mouseY(event) - 150) + 'px';
+                        menuElement.style.top = (mouseY(event)) + 'px';
                     }
 
                     menuElement.style.left = mouseX(event) + 'px';
@@ -125,8 +133,8 @@ function bindContextMenu(ko, document) {
                     menuElement.style.left = (element.offsetLeft + element.offsetWidth) + 'px';
                 }
 
-                // if not body, put it somewhere
-                (document.body || document).appendChild(menuElement);
+                // now set to visible
+                menuElement.style.visibility = "";
 
                 // replace current menu with the recently created
                 currentMenu = menuElement;

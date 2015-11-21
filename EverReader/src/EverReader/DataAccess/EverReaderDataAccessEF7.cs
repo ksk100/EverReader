@@ -46,6 +46,11 @@ namespace EverReader.DataAccess
             return _dbContext.Bookmarks.SingleOrDefault(b => (b.UserId == userId) && (b.NoteGuid == guid) && b.Type == BookmarkType.Automatic);
         }
 
+        public List<Bookmark> GetManualBookmarks(string userId, string guid)
+        {
+            return _dbContext.Bookmarks.Where(b => (b.UserId == userId) && (b.NoteGuid == guid) && b.Type == BookmarkType.Manual).OrderBy(b => b.PercentageRead).ToList();
+        }
+
         public void SaveBookmark(Bookmark bookmark)
         {
             _dbContext.Bookmarks.Update(bookmark);

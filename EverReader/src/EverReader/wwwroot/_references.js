@@ -11,3 +11,4 @@
 /// <reference path="lib/knockout/dist/knockout.js" />
 /// <reference path="lib/lightbox2/dist/js/lightbox.js" />
 /// <reference path="lib/moment/moment.js" />
+/// <reference path="lib/remarkable-bootstrap-notify/bootstrap-notify.js" />
