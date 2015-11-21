@@ -41,7 +41,10 @@ var reader = (function ($) {
         // - get selection
         var lastSelectedText = reader.getSelection() || "[ untitled ]";
 
-        // TODO: 
+        if (lastSelectedText.length > 30) {
+            lastSelectedText = lastSelectedText.slice(0, lastSelectedText.indexOf(' ', 30) + 1) + "...";
+        }
+
         // - save the bookmark
         $.ajax("/api/bookmarks/" + noteGuid, {
             "method": "POST",
@@ -143,10 +146,18 @@ $(document).ready(function () {
         }
 
         function addBookmark(documentPercentageRead, bookmarkTitle)  {
-            console.log("ViewModel.addBookmark fired");
-            bookmarks.push({
+            var insertIndex = (bookmarks().length == 0) ? 0 : bookmarks().length;
+            for (var i = 0; i < bookmarks().length; i++) {
+                if (bookmarks()[i].percentageRead > documentPercentageRead) {
+                    insertIndex = i;
+                    break;
+                }
+            }
+
+            bookmarks().splice(insertIndex, 0, {
                 action: function () { reader.navigateToPosition(documentPercentageRead) },
-                text: "[" + formatPercentageRead(documentPercentageRead) + "] " + bookmarkTitle
+                text: "[" + formatPercentageRead(documentPercentageRead) + "] " + bookmarkTitle,
+                percentageRead: documentPercentageRead
             });
         }
 
