@@ -37,3 +37,9 @@ textarea {
 .navbar-inverse-text-color {
     color: #999999;
 }
+
+
+.navbar-fixed-bottom > div > div {
+    padding-top: 5px;
+    padding-bottom: 5px;
+}
