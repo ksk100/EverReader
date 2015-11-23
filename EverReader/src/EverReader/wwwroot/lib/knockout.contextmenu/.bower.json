@@ -1,6 +1,6 @@
 {
   "name": "knockout.contextmenu",
-  "version": "0.3.1",
+  "version": "0.3.5",
   "homepage": "https://github.com/nescalante/knockout.contextmenu",
   "authors": [
     "Nicolás Escalante <nlante@gmail.com>"
@@ -23,13 +23,13 @@
     ".jshintrc",
     "README.md"
   ],
-  "_release": "0.3.1",
+  "_release": "0.3.5",
   "_resolution": {
     "type": "version",
-    "tag": "0.3.1",
-    "commit": "945741aa8a719c7cb1b1801ee59b56122160cd4b"
+    "tag": "0.3.5",
+    "commit": "9b21a0b886ab252ca5ba920d5c4f3af8043df21b"
   },
   "_source": "git://github.com/nescalante/knockout.contextmenu.git",
-  "_target": "*",
+  "_target": "0.3.5",
   "_originalSource": "knockout.contextmenu"
 }

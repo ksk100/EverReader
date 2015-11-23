@@ -11,7 +11,7 @@
     "moment": "*",
     "fancybox": "2.1.5",
     "knockout": "3.4.0",
-    "knockout.contextmenu": "*",
+    "knockout.contextmenu": "0.3.5",
     "remarkable-bootstrap-notify" : "*"
   }
 }
