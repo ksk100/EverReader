@@ -1,9 +1,9 @@
-﻿function everReaderNotify(message) {
+﻿function everReaderNotify(message, type) {
 
     $.notify({
         message : message
     }, {
-        type: 'success',
+        type: type || 'success',
         placement: {
             from: "bottom",
             align: "center"

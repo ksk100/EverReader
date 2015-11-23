@@ -28,7 +28,7 @@ namespace EverReader
             _dataAccess = dataAccess;
         }
 
-        // PUT api/bookmarks/{guid}
+        // GET /api/bookmarks/{guid}
         [HttpGet("{guid:guid}")]
         public async Task<JsonResult> Get(string guid)
         {
@@ -47,10 +47,13 @@ namespace EverReader
 
             List<Bookmark> bookmarks = _dataAccess.GetManualBookmarks(currentUserId, guid);
 
-            return Json(bookmarks);
+            var bookmarksForClient = from bookmark in bookmarks
+                                     select new { bookmark.Id, bookmark.BookmarkTitle, bookmark.PercentageRead };
+
+            return Json(bookmarksForClient);
         }
 
-        // PUT api/bookmarks/{guid}
+        // PUT /api/bookmarks/{guid}
         [HttpPut("{guid:guid}")]
         public async Task<JsonResult> Put(string guid, decimal percentageRead)
         {
@@ -88,9 +91,54 @@ namespace EverReader
             return Json(response);
         }
 
-        // PUT api/bookmarks/{guid}
+        // POST /api/bookmarks/{guid}
         [HttpPost("{guid:guid}")]
         public async Task<JsonResult> Post(string guid, string bookmarkTitle, decimal percentageRead)
+        {
+            string currentUserId = HttpContext.User.GetUserId();
+            Dictionary<string, object> response = new Dictionary<string, object>();
+
+            if (bookmarkTitle == null || bookmarkTitle.Length > 64)
+            {
+                response["error"] = "Bookmark title cannot be empty, and must be no more than 64 characters.";
+                return Json(response);
+            }
+
+            ApplicationUser user = await ControllerHelpers.GetCurrentUserAsync(_userManager, _dataAccess, currentUserId);
+
+            if (user.EvernoteCredentials == null)
+            {
+                response["error"] = "You must authenticate with Evernote";
+                return Json(response);
+            }
+
+            IEvernoteService evernoteService = new EvernoteServiceSDK1(user.EvernoteCredentials);
+
+            // TODO: check for valid note id here?  it won't matter, because bookmarks always retrieved using userId + noteGuid
+            // if (evernoteService.GetNote(guid) == null)
+            // {
+            // }
+
+            Bookmark bookmark =  new Bookmark()
+            {
+                NoteGuid = guid,
+                Type = BookmarkType.Manual,
+                BookmarkTitle = bookmarkTitle,
+                PercentageRead = percentageRead,
+                UserId = currentUserId,
+                Updated = DateTime.Now
+            };
+
+            _dataAccess.SaveBookmark(bookmark);
+
+            response["id"] = bookmark.Id;
+
+            return Json(response);
+        }
+
+        // DELETE /api/bookmarks/{guid}
+        [HttpDelete("{guid:guid}")]
+        public async Task<JsonResult> Delete(int id)
         {
             string currentUserId = HttpContext.User.GetUserId();
             Dictionary<string, object> response = new Dictionary<string, object>();
@@ -105,19 +153,24 @@ namespace EverReader
 
             IEvernoteService evernoteService = new EvernoteServiceSDK1(user.EvernoteCredentials);
 
-            Bookmark bookmark =  new Bookmark()
-            {
-                NoteGuid = guid,
-                Type = BookmarkType.Manual,
-                BookmarkTitle = bookmarkTitle,
-                PercentageRead = percentageRead,
-                UserId = currentUserId,
-                Updated = DateTime.Now
-            };
+            Bookmark bookmark = _dataAccess.GetBookmarkById(id);
 
-            _dataAccess.SaveBookmark(bookmark);
+            if (bookmark == null)
+            {
+                response["error"] = "Unable to delete bookmark: no such bookmark";
+                return Json(response);
+            }
+
+            if (bookmark.UserId != currentUserId)
+            {
+                response["error"] = "Unable to delete bookmark: user not authorised";
+                return Json(response);
+            }
+
+            _dataAccess.DeleteBookmark(bookmark);
 
             return Json(response);
         }
+
     }
 }

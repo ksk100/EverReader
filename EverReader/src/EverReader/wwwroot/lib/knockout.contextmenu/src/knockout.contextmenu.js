@@ -146,8 +146,9 @@ function bindContextMenu(ko, document) {
         });
 
         if (elements.length) {
-          menu = document.createElement('div');
-          menu.className = defaultClass;
+            menu = document.createElement('div');
+            menu.setAttribute("id", "koContextMenu");
+            menu.className = defaultClass;
 
           // you may need padding to menus that has checks
           menu.innerHTML = '<ul class="' + (hasChecks ? 'has-checks' : '') + '">' + elements.join('') + '</ul>';

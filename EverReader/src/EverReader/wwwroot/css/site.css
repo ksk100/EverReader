@@ -39,6 +39,15 @@ textarea {
 }
 
 
+.navbar-fixed-top {
+    border-bottom: 1px solid #aaa;
+    background-color: #f0f0f0;
+}
+.navbar-fixed-bottom {
+    border-top: 1px solid #aaa;
+    background-color: #f0f0f0;
+}
+
 .navbar-fixed-bottom > div > div {
     padding-top: 5px;
     padding-bottom: 5px;
@@ -47,3 +56,4 @@ textarea {
  .glyphicon-help-icon {
      font-size: 18px;
  }
+

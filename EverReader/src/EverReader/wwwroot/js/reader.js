@@ -49,9 +49,9 @@ var reader = (function ($) {
         $.ajax("/api/bookmarks/" + noteGuid, {
             "method": "POST",
             "data": { "percentageRead": documentPercentageRead, "bookmarkTitle" : lastSelectedText },
-            "success": function () {
-                self.readerViewModel.addBookmark(documentPercentageRead, lastSelectedText);
-                everReaderNotify("Bookmark successfully added");
+            "success": function (data) {
+                self.readerViewModel.addBookmark(data.id, documentPercentageRead, lastSelectedText);
+                everReaderNotify("Bookmark added");
             },
             "error": function () {
                 // TODO: alert the user their position wasn't saved?
@@ -61,12 +61,37 @@ var reader = (function ($) {
         return false;
     }
 
+    function deleteBookmark(event, id) {
+        // delete the bookmark
+        $.ajax("/api/bookmarks/" + noteGuid, {
+            "method": "DELETE",
+            "data": { "id": id },
+            "success": function (data) {
+                if (!data.error) {
+                    self.readerViewModel.deleteBookmark(id);
+                    everReaderNotify("Bookmark deleted");
+                } else {
+                    everReaderNotify("There was a problem deleting your bookmark", "danger");
+                }
+            },
+            "error": function () {
+                everReaderNotify("There was a problem deleting your bookmark", "danger");
+            }
+        });
+
+        event.stopPropagation();
+        $("#koContextMenu").remove();
+        return false;
+    }
+
+
     // the external interface exposed
     self.calculateDocumentReadPosition = calculateDocumentReadPosition;
     self.getSelection = getSelection;
     self.navigateToPosition = navigateToPosition;
     self.saveSelection = saveSelection;
     self.addBookmark = addBookmark;
+    self.deleteBookmark = deleteBookmark;
 
     return self;
 
@@ -145,7 +170,7 @@ $(document).ready(function () {
             return documentPercentageRead.toPrecision(4) + "%";
         }
 
-        function addBookmark(documentPercentageRead, bookmarkTitle)  {
+        function addBookmark(id, documentPercentageRead, bookmarkTitle)  {
             var insertIndex = (bookmarks().length == 0) ? 0 : bookmarks().length;
             for (var i = 0; i < bookmarks().length; i++) {
                 if (bookmarks()[i].percentageRead > documentPercentageRead) {
@@ -155,15 +180,28 @@ $(document).ready(function () {
             }
 
             bookmarks().splice(insertIndex, 0, {
+                id : id,
                 action: function () { reader.navigateToPosition(documentPercentageRead) },
-                text: "[" + formatPercentageRead(documentPercentageRead) + "] " + bookmarkTitle,
+                text: "[" + formatPercentageRead(documentPercentageRead) + "] " +
+                            bookmarkTitle +
+                            "&nbsp;<span class='glyphicon glyphicon-remove pull-right' onclick='return reader.deleteBookmark(event, " + id + ");' style='top: 3px'></span>",
                 percentageRead: documentPercentageRead
             });
         }
 
+        function deleteBookmark(id) {
+            for (var i = 0; i < bookmarks().length; i++) {
+                if (bookmarks()[i].id == id) {
+                    bookmarks().splice(i, 1);
+                    break;
+                }
+            }
+        }
+
         return {
             bookmarks: bookmarks,
-            addBookmark: addBookmark
+            addBookmark: addBookmark,
+            deleteBookmark : deleteBookmark
         };
     })();
 
@@ -174,7 +212,7 @@ $(document).ready(function () {
         "data": { },
         "success": function (data) {
             data.forEach(function (bookmark) {
-                reader.readerViewModel.addBookmark(bookmark.PercentageRead, bookmark.BookmarkTitle);
+                reader.readerViewModel.addBookmark(bookmark.Id, bookmark.PercentageRead, bookmark.BookmarkTitle);
             });
         },
         "error": function () {
