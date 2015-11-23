@@ -19,8 +19,8 @@
                             <span class="input-group-addon">
                                 <span class="glyphicon glyphicon-search"></span>
                             </span>
-                            <input asp-for="SearchField" class="form-control" />&nbsp;
-                            <span class="glyphicon glyphicon-info-sign glyphicon-help-icon" data-toggle="info-popover" data-trigger="hover" data-content="Supports standard Evernote search syntax: e.g. tag:SOME_TAG, intitle:NAME"></span>
+                            <input asp-for="SearchField" class="form-control" />&nbsp;<span class="glyphicon glyphicon-info-sign glyphicon-help-icon" data-toggle="info-popover" data-trigger="hover" data-content="Supports standard Evernote search syntax: e.g. tag:SOME_TAG, intitle:NAME"></span>
+                            
                             &nbsp;<span asp-validation-for="SearchField" class="text-danger"></span>
                         </div>
                     </div>
@@ -35,6 +35,7 @@
 @if (Model.SearchResults != null)
 {
         <section>
+            <div>Found <span class="label label-info">@Model.SearchResults.Count</span> matching notes<br /><br /></div>
             <table class="table table-striped table-responsive">
                 <tr>
                     <th>Note title</th>
