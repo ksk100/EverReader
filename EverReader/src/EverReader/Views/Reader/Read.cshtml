@@ -21,10 +21,12 @@
     </div>
 </div>
 
-<div class="navbar-inverse navbar-fixed-bottom">
+<div class="navbar-default navbar-fixed-bottom" style="border-top: 1px solid #999">
     <div class="container">
         <div class="btn-toolbar cols-xs-8 cols-sm-8 cols-md-8 pull-left" role="toolbar">
             <button type="button" class="btn btn-default btn-xs" id="addBookmark">Add bookmark</button>
+            <span class="glyphicon glyphicon-info-sign" data-toggle="info-popover" data-trigger="hover" data-content="Name your bookmark by selecting some text then clicking 'Add bookmark'"></span>
+            &nbsp;
             <button type="button" class="btn btn-default btn-xs" data-bind="contextMenu: bookmarks, bindMenuOnClick: true, bindMenuOnContextMenu: false">Bookmarks</button>
         </div>
         <div class="cols-xs-4 cols-sm-4 cols-md-4 pull-right">
@@ -35,18 +37,24 @@
 
 @section scripts {
 
-    <script type="text/javascript">
-        var noteGuid = "@Model.NoteGuid";
-        var percentageRead = @Model.PercentageRead;
-    </script>
+<script type="text/javascript">
+    var noteGuid = "@Model.NoteGuid";
+    var percentageRead = @Model.PercentageRead;
+</script>
 
-    <link rel="stylesheet" href="~/css/reader.css" />
-    <link rel="stylesheet" href="~/lib/knockout.contextmenu/dist/css/knockout.contextmenu.min.css" />
+<link rel="stylesheet" href="~/css/reader.css" />
+<link rel="stylesheet" href="~/lib/knockout.contextmenu/dist/css/knockout.contextmenu.min.css" />
 
     
-    <script src="~/lib/knockout/dist/knockout.debug.js"></script>
-    <script src="~/lib/knockout.contextmenu/dist/js/knockout.contextmenu.js"></script>
-    <script src="~/lib/bootstrap/js/affix.js"></script> <!-- unused at mo -->
-    <script src="~/lib/moment/moment.js"></script>
-    <script src="~/js/reader.js"></script>   
+<script src="~/lib/knockout/dist/knockout.debug.js"></script>
+<script src="~/lib/knockout.contextmenu/dist/js/knockout.contextmenu.js"></script>
+<script src="~/lib/bootstrap/js/affix.js"></script> <!-- unused at mo -->
+<script src="~/lib/moment/moment.js"></script>
+<script src="~/js/reader.js"></script>   
+
+<script>
+    $(document).ready(function () {
+        $('[data-toggle="info-popover"]').popover();
+    });
+</script>
 }

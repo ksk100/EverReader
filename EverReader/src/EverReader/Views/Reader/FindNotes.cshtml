@@ -19,8 +19,9 @@
                             <span class="input-group-addon">
                                 <span class="glyphicon glyphicon-search"></span>
                             </span>
-                            <input asp-for="SearchField" class="form-control" />
-                            <span asp-validation-for="SearchField" class="text-danger"></span>
+                            <input asp-for="SearchField" class="form-control" />&nbsp;
+                            <span class="glyphicon glyphicon-info-sign glyphicon-help-icon" data-toggle="info-popover" data-trigger="hover" data-content="Supports standard Evernote search syntax: e.g. tag:SOME_TAG, intitle:NAME"></span>
+                            &nbsp;<span asp-validation-for="SearchField" class="text-danger"></span>
                         </div>
                     </div>
                 </div>
@@ -82,3 +83,10 @@
     </div>
 </div>
 
+@section scripts {
+<script>
+    $(document).ready(function () {
+        $('[data-toggle="info-popover"]').popover();
+    });
+</script>
+}

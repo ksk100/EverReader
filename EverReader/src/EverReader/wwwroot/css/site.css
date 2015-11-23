@@ -43,3 +43,7 @@ textarea {
     padding-top: 5px;
     padding-bottom: 5px;
 }
+
+ .glyphicon-help-icon {
+     font-size: 18px;
+ }
