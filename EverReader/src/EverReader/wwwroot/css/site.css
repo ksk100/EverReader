@@ -57,3 +57,7 @@ textarea {
      font-size: 18px;
  }
 
+.form-control-checkbox {
+    height: 28px;
+    padding: 6px 12px;
+}

@@ -12,16 +12,39 @@
                 <h4>Search for notes to begin reading</h4>
                 <hr />
                 @*<div asp-validation-summary="ValidationSummary.All" class="text-danger"></div>*@
-                <div class="form-group">
+                <div class="form-group" style="margin-bottom: 3px;">
                     <label asp-for="SearchField" class="col-md-2 control-label"></label>
+                    
                     <div class="col-md-10">
                         <div class="input-group">
                             <span class="input-group-addon">
                                 <span class="glyphicon glyphicon-search"></span>
                             </span>
-                            <input asp-for="SearchField" class="form-control" />&nbsp;<span class="glyphicon glyphicon-info-sign glyphicon-help-icon" data-toggle="info-popover" data-trigger="hover" data-content="Supports standard Evernote search syntax: e.g. tag:SOME_TAG, intitle:NAME"></span>
+                            <input asp-for="SearchField" class="form-control" />
                             
                             &nbsp;<span asp-validation-for="SearchField" class="text-danger"></span>
+
+                            @*&nbsp;<span class="glyphicon glyphicon-info-sign glyphicon-help-icon pull-left" data-toggle="info-popover" data-trigger="hover" data-content="Supports standard Evernote search syntax: e.g. tag:SOME_TAG, intitle:NAME"></span>*@
+                            
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group" style="margin-bottom: 6px;">
+   
+                    <div class="col-md-offset-2 col-md-10">
+
+                            @*<span class="glyphicon glyphicon-info-sign glyphicon-help-icon pull-left" data-toggle="info-popover" data-trigger="hover" data-content=""></span>*@
+                            <small>Supports standard Evernote search syntax: e.g. tag:SOME_TAG, intitle:NAME</small>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label asp-for="ExcludeShortNotes" class="col-md-2 control-label"></label>
+                    <div class="col-md-10">
+                        <div class="input-group">
+                            
+                            <input asp-for="ExcludeShortNotes" class="form-control-checkbox" />
+
+                            &nbsp;<span asp-validation-for="ExcludeShortNotes" class="text-danger"></span>
                         </div>
                     </div>
                 </div>

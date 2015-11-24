@@ -60,6 +60,11 @@ namespace EverReader.Controllers
                 {
                     findNotesViewModel.SearchResults = evernoteService.GetNotesMetaList(findNotesViewModel.SearchField);
 
+                    if (findNotesViewModel.ExcludeShortNotes)
+                    {
+                        findNotesViewModel.SearchResults.RemoveAll(metadata => metadata.BaseNoteMetadata.ContentLength < (1024 * 3));
+                    }
+
                     // now we populate with tags
                     foreach (EvernoteNodeMetadataDecorator noteMetadata in findNotesViewModel.SearchResults)
                     {

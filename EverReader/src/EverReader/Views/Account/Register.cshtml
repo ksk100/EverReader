@@ -48,7 +48,7 @@
     <div class="form-group">
         <label asp-for="AgreeToTCs" class="col-md-2 control-label">I agree to the <a asp-controller="Home" asp-action="TermsAndConditions">Terms and Conditions</a></label>
         <div class="col-md-10">
-            <input asp-for="AgreeToTCs"  />
+            <input asp-for="AgreeToTCs"  class="form-control-checkbox" />
             <span asp-validation-for="AgreeToTCs" class="text-danger"></span>
         </div>
     </div>
