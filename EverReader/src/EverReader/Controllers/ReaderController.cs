@@ -115,9 +115,28 @@ namespace EverReader.Controllers
 
             string decodedContent = WebUtility.HtmlDecode(note.Content);
 
+            // ensure that links to other Evernote notes are directed through EverReader
             decodedContent = Regex.Replace(decodedContent, 
                 "<a href=\"evernote:///view/[^/]+/[^/]+/[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}/([0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12})/", 
                 "<a href=\"/Reader/Read/$1");
+
+            // convert en-media tags to img tags
+            // get a list of image resources, indexed to the MD5SUM hash
+            Dictionary<string, string> hashGuidMapping = new Dictionary<string, string>();
+            foreach (Resource resource in note.Resources)
+            {
+                if (resource.Mime.StartsWith("image") && resource.Data.Size < 1024 * 512)
+                {
+                    hashGuidMapping.Add(resource.Data.BodyHash.ToHexString(), resource.Guid);
+                }
+            }
+            // search and replace each resource in the document
+            foreach (string hash in hashGuidMapping.Keys)
+            {
+                decodedContent = Regex.Replace(decodedContent,
+                    "en-media( [^>]*)? hash=[\"'](" + hash + ")[\"']",
+                    "img $1 src=\"/Reader/NoteResource/" + hashGuidMapping[hash] + "\"");
+            }
 
             // Create view model for page
             ReaderViewModel readerViewModel = new ReaderViewModel()
@@ -129,6 +148,41 @@ namespace EverReader.Controllers
             };
 
             return View(readerViewModel);
+        }
+
+        [HttpGet]
+        [Route("Reader/NoteResource/{resourceGuid:guid}")]
+        public async Task<IActionResult> NoteResource(string resourceGuid)
+        {
+            string currentUserId = HttpContext.User.GetUserId();
+            ApplicationUser user = await ControllerHelpers.GetCurrentUserAsync(_userManager, _dataAccess, currentUserId);
+            if (user.EvernoteCredentials == null)
+            {
+                return View("MustAuthoriseEvernote");
+            }
+            IEvernoteService evernoteService = new EvernoteServiceSDK1(user.EvernoteCredentials);
+
+            Resource resource;
+            try
+            {
+                resource = evernoteService.GetResource(resourceGuid);
+            }
+            catch (EvernoteServiceSDK1AuthorisationException)
+            {
+                // thrown if the user's credentials are no longer valid
+                return View("EvernoteAuthorisationError");
+            }
+
+            if (!resource.Mime.StartsWith("image"))
+            {
+                return View("UnknownResourceTypeError");
+            }
+            if (resource.Data.Size > 1024 * 512)
+            {
+                return new HttpNotFoundResult();
+            }
+
+            return File(resource.Data.Body, resource.Mime);
         }
 
         public async Task<IActionResult> RecentlyRead()

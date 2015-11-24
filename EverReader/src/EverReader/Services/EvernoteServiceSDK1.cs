@@ -71,5 +71,24 @@ namespace EverReader.Services
             }
             return note;
         }
+
+        public Resource GetResource(string resourceGuid)
+        {
+            Resource resource;
+
+            try
+            {
+                resource = noteStore.getResource(credentials.AuthToken, resourceGuid, true, false, false, false);
+            }
+            catch (EDAMUserException)
+            {
+                throw new EvernoteServiceSDK1AuthorisationException();
+            }
+            catch (EDAMNotFoundException)
+            {
+                throw new EvernoteServiceSDK1NoteNotFoundException();
+            }
+            return resource;
+        }
     }
 }
