@@ -8,9 +8,10 @@ using EverReader.Models;
 namespace EverReader.Migrations
 {
     [DbContext(typeof(EverReaderContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20151124161049_TagStore")]
+    partial class TagStore
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
             modelBuilder
                 .Annotation("ProductVersion", "7.0.0-beta8-15964")
@@ -126,7 +127,7 @@ namespace EverReader.Migrations
                     b.HasKey("Id");
                 });
 
-            modelBuilder.Entity("EverReader.Models.TagData", b =>
+            modelBuilder.Entity("EverReader.Models.Tag", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd();
@@ -135,7 +136,7 @@ namespace EverReader.Migrations
 
                     b.Property<string>("Name");
 
-                    b.Property<string>("UserId");
+                    b.Property<int>("UserId");
 
                     b.HasKey("Id");
                 });

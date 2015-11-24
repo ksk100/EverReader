@@ -43,7 +43,8 @@ namespace EverReader.Services
 
             try {
                 noteMetadataList = noteStore.findNotesMetadata(credentials.AuthToken, noteFilter, 0, 100, resultsSpec);
-            } catch (EDAMUserException)
+            }
+            catch (EDAMUserException)
             {
                 throw new EvernoteServiceSDK1AuthorisationException();
             }
@@ -89,6 +90,26 @@ namespace EverReader.Services
                 throw new EvernoteServiceSDK1NoteNotFoundException();
             }
             return resource;
+        }
+
+        public Tag GetTag(string tagGuid)
+        {
+            Tag tag;
+
+            try
+            {
+                tag = noteStore.getTag(credentials.AuthToken, tagGuid);
+            }
+            catch (EDAMUserException)
+            {
+                throw new EvernoteServiceSDK1AuthorisationException();
+            }
+            catch (EDAMNotFoundException)
+            {
+                throw new EvernoteServiceSDK1NoteNotFoundException();
+            }
+
+            return tag;
         }
     }
 }

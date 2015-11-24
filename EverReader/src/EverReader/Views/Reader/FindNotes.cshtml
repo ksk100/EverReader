@@ -48,6 +48,11 @@
                 <tr>
                     <td>
                         <strong><a asp-action="Read" asp-controller="Reader" asp-route-guid="@item.BaseNoteMetadata.Guid">@item.Title</a></strong>
+                        @if (item.Tags != null && item.Tags.Count > 0)
+                        {
+                            <br />
+                            <small><strong>Tags:</strong> @String.Join(", ", item.Tags.ToArray())</small>
+                        }
                         @if (!String.IsNullOrWhiteSpace(item.Source))
                         {
                             <br />

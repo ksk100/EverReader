@@ -13,5 +13,6 @@ namespace EverReader.Services
         List<EvernoteNodeMetadataDecorator> GetNotesMetaList(string searchString);
         Note GetNote(string guid);
         Resource GetResource(string resourceGuid);
+        Tag GetTag(string tagGuid);
     }
 }

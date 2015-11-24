@@ -10,6 +10,8 @@ namespace EverReader.Models
     {
         public NoteMetadata BaseNoteMetadata { get; set; }
 
+        public List<string> Tags { get; set; }
+
         public string Title
         {
             get

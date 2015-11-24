@@ -18,6 +18,10 @@ namespace EverReader.DataAccess
 
         Bookmark GetAutomaticBookmark(string userId, string guid);
 
+        TagData GetTag(string userId, string tagGuid);
+
+        void SaveTag(TagData tag);
+
         void SaveBookmark(Bookmark bookmark);
 
         void DeleteBookmark(Bookmark bookmark);

@@ -59,6 +59,28 @@ namespace EverReader.Controllers
                 try
                 {
                     findNotesViewModel.SearchResults = evernoteService.GetNotesMetaList(findNotesViewModel.SearchField);
+
+                    // now we populate with tags
+                    foreach (EvernoteNodeMetadataDecorator noteMetadata in findNotesViewModel.SearchResults)
+                    {
+                        if (noteMetadata.BaseNoteMetadata.TagGuids != null)
+                        {
+                            noteMetadata.Tags = new List<string>();
+
+                            foreach (string tagGuid in noteMetadata.BaseNoteMetadata.TagGuids)
+                            {
+                                TagData tag = _dataAccess.GetTag(user.Id, tagGuid);
+                                if (tag == null)
+                                {
+                                    // save tag
+                                    Tag evernoteTag = evernoteService.GetTag(tagGuid);
+                                    tag = new TagData { Guid = tagGuid, Name = evernoteTag.Name, UserId = user.Id };
+                                    _dataAccess.SaveTag(tag);
+                                } 
+                                noteMetadata.Tags.Add(tag.Name);
+                            }
+                        }
+                    }
                 }
                 catch (EvernoteServiceSDK1AuthorisationException)
                 {

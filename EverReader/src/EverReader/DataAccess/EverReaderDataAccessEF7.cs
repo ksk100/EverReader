@@ -68,5 +68,16 @@ namespace EverReader.DataAccess
             return _dbContext.Bookmarks.Where(b => (b.UserId == userId) && b.Type == BookmarkType.Automatic).OrderByDescending(b => b.Updated).ToList();
         }
 
+        public TagData GetTag(string userId, string tagGuid)
+        {
+            return _dbContext.Tags.Where(t => t.UserId == userId && t.Guid == tagGuid).SingleOrDefault();
+        }
+
+        public void SaveTag(TagData tag)
+        {
+            _dbContext.Tags.Add(tag);
+            _dbContext.SaveChanges();
+        }
+
     }
 }
