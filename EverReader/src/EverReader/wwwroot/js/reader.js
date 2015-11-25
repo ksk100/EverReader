@@ -17,6 +17,7 @@ var reader = (function ($) {
     }
 
     function navigateToPosition(percentage) {
+        reader.documentScrollPercent = percentage;
         var docHeight = $(document).height();
         var winHeight = $(window).height();
 
@@ -154,9 +155,7 @@ $(document).ready(function () {
 
         }, 700);
 
-        var documentScrollPercent = ((savedWinScrollTop) / (savedDocHeight - savedWinHeight)) * 100;
-
-        $("#positionReport").text(documentScrollPercent.toPrecision(4) + "%");
+        reader.readerViewModel.documentScrollPercent(((savedWinScrollTop) / (savedDocHeight - savedWinHeight)) * 100);
     });
 
     // zoom to currently read position
@@ -165,9 +164,14 @@ $(document).ready(function () {
     // setup the view model for KO
     reader.readerViewModel = (function () {
         var bookmarks = ko.observableArray([]);
+        var documentScrollPercent = ko.observable(0);
+
+        function documentScrollPercentFormatted() {
+            return formatPercentageRead(documentScrollPercent);
+        }
 
         function formatPercentageRead(documentPercentageRead) {
-            return documentPercentageRead.toPrecision(4) + "%";
+            return (ko.isObservable(documentPercentageRead) ? documentPercentageRead() : documentPercentageRead).toFixed(2) + "%";
         }
 
         function addBookmark(id, documentPercentageRead, bookmarkTitle)  {
@@ -201,7 +205,9 @@ $(document).ready(function () {
         return {
             bookmarks: bookmarks,
             addBookmark: addBookmark,
-            deleteBookmark : deleteBookmark
+            deleteBookmark: deleteBookmark,
+            documentScrollPercent: documentScrollPercent,
+            documentScrollPercentFormatted: documentScrollPercentFormatted
         };
     })();
 
