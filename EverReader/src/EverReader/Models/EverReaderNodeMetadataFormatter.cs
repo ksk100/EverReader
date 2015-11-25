@@ -6,19 +6,16 @@ using Evernote.EDAM.NoteStore;
 
 namespace EverReader.Models
 {
-    public class EvernoteNodeMetadataDecorator
+    public class EverReaderNodeMetadataFormatter
     {
-        public NoteMetadata BaseNoteMetadata { get; set; }
+        public INoteMetadata BaseNoteMetadata { get; set; }
 
-        public List<string> Tags { get; set; }
-
-        public string Title
-        {
-            get
-            {
-                return BaseNoteMetadata.Title;
-            }
-        }
+        public string Title { get { return BaseNoteMetadata.Title; } }
+        public string Guid { get { return BaseNoteMetadata.Guid; } }
+        public string SourceUrl { get { return BaseNoteMetadata.SourceUrl; } }
+        public string SourceApplication { get { return BaseNoteMetadata.SourceApplication; } }
+        public List<string> TagNames { get { return BaseNoteMetadata.TagNames; } set { BaseNoteMetadata.TagNames = value; } }
+        public List<string> TagGuids { get { return BaseNoteMetadata.TagGuids; } }
 
         public DateTime CreatedDateTime
         {
@@ -42,12 +39,12 @@ namespace EverReader.Models
         {
             get
             {
-                if (String.IsNullOrWhiteSpace(BaseNoteMetadata.Attributes.Source))
+                if (String.IsNullOrWhiteSpace(BaseNoteMetadata.Source))
                 {
                     return null;
                 } else
                 {
-                    switch (BaseNoteMetadata.Attributes.Source)
+                    switch (BaseNoteMetadata.Source)
                     {
                         case "mobile.android":
                             return "Android";
@@ -58,7 +55,7 @@ namespace EverReader.Models
                         case "web.clip":
                             return "Web clipping";
                         default:
-                            return BaseNoteMetadata.Attributes.Source;
+                            return BaseNoteMetadata.Source;
                     }
                 }
             }
@@ -82,7 +79,7 @@ namespace EverReader.Models
             }
         }
 
-        public EvernoteNodeMetadataDecorator(NoteMetadata noteMetadata)
+        public EverReaderNodeMetadataFormatter(INoteMetadata noteMetadata)
         {
             BaseNoteMetadata = noteMetadata;
         }

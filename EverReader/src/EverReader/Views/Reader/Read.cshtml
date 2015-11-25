@@ -1,19 +1,38 @@
 ﻿@model EverReader.ViewModels.Reader.ReaderViewModel
 
 @{
-    ViewBag.Title = "Reader: " + Model.Title;
+    ViewBag.Title = "Reading note: " + Model.FormattedNoteMetadata.Title;
 }
 
-@*<div class="navbar-inverse navbar-lower" data-spy="affix" data-offset-top="50">
-    <div class="container">
-        <div class="cols-xs-6 navbar-left">*@
-           <h3>@ViewBag.Title</h3>
-        @*@</div>
-        <div class="cols-xs-6 navbar-right">
-            jk
-        </div>
+<div class="row">
+    <div class="col-md-12">
+    <h3>@ViewBag.Title</h3>
+
+    @if (Model.FormattedNoteMetadata.TagNames != null && Model.FormattedNoteMetadata.TagNames.Count > 0)
+    {
+        <small><strong>Tags:</strong> @String.Join(", ", Model.FormattedNoteMetadata.TagNames.ToArray())</small>
+        <br />
+    }            
+    @if (!String.IsNullOrWhiteSpace(Model.FormattedNoteMetadata.Source))
+    {
+        <small><strong>Source:</strong> @Model.FormattedNoteMetadata.Source</small>
+        <br />
+    }
+    @if (!String.IsNullOrWhiteSpace(Model.FormattedNoteMetadata.SourceUrl))
+    {
+        if (!Model.FormattedNoteMetadata.SourceUrl.StartsWith("file://"))
+        {
+            <small><strong>URL:</strong> <a href="@Model.FormattedNoteMetadata.SourceUrl">@Model.FormattedNoteMetadata.SourceUrl</a></small>
+            <br />
+        }
+    }
+    @if (!String.IsNullOrWhiteSpace(Model.FormattedNoteMetadata.SourceApplication))
+    {
+        <small>@Model.FormattedNoteMetadata.SourceApplication</small>
+        <br />
+    }    
     </div>
-</div>*@
+</div>    
 
 <div class="row">
     <div class="col-md-12">
@@ -38,7 +57,7 @@
 @section scripts {
 
 <script type="text/javascript">
-    var noteGuid = "@Model.NoteGuid";
+    var noteGuid = "@Model.FormattedNoteMetadata.Guid";
     var percentageRead = @Model.PercentageRead;
 </script>
 

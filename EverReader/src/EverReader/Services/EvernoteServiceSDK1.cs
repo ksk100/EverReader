@@ -25,7 +25,7 @@ namespace EverReader.Services
             noteStore = new NoteStore.Client(noteStoreProtocol);
         }
 
-        public List<EvernoteNodeMetadataDecorator> GetNotesMetaList(string searchString)
+        public List<INoteMetadata> GetNotesMetaList(string searchString)
         {
             NoteFilter noteFilter = new NoteFilter();
             noteFilter.Words = searchString;
@@ -49,9 +49,10 @@ namespace EverReader.Services
                 throw new EvernoteServiceSDK1AuthorisationException();
             }
 
-            List<EvernoteNodeMetadataDecorator> notesMetaWrapperList = noteMetadataList.Notes.ConvertAll(noteMeta => new EvernoteNodeMetadataDecorator(noteMeta));
+            List<ENNoteMetadataINoteMetadataAdapter> notesMetaWrapperList = 
+                noteMetadataList.Notes.ConvertAll(noteMeta => new ENNoteMetadataINoteMetadataAdapter(noteMeta));
 
-            return notesMetaWrapperList;
+            return notesMetaWrapperList.ToList<INoteMetadata>();
         }
 
         public Note GetNote(string guid)

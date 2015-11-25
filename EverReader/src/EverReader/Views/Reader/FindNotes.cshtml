@@ -70,29 +70,29 @@
                 {
                 <tr>
                     <td>
-                        <strong><a asp-action="Read" asp-controller="Reader" asp-route-guid="@item.BaseNoteMetadata.Guid">@item.Title</a></strong>
-                        @if (item.Tags != null && item.Tags.Count > 0)
+                        <strong><a asp-action="Read" asp-controller="Reader" asp-route-guid="@item.Guid">@item.Title</a></strong>
+                        @if (item.TagNames != null && item.TagNames.Count > 0)
                         {
                             <br />
-                            <small><strong>Tags:</strong> @String.Join(", ", item.Tags.ToArray())</small>
+                            <small><strong>Tags:</strong> @String.Join(", ", item.TagNames.ToArray())</small>
                         }
                         @if (!String.IsNullOrWhiteSpace(item.Source))
                         {
                             <br />
                             <small><strong>Source:</strong> @item.Source</small>
                         }
-                        @if (!String.IsNullOrWhiteSpace(item.BaseNoteMetadata.Attributes.SourceURL))
+                        @if (!String.IsNullOrWhiteSpace(item.SourceUrl))
                         {
-                            if (!item.BaseNoteMetadata.Attributes.SourceURL.StartsWith("file://"))
+                            if (!item.BaseNoteMetadata.SourceUrl.StartsWith("file://"))
                             {
                                 <br />
-                                <small><strong>URL:</strong> <a href="@item.BaseNoteMetadata.Attributes.SourceURL">@item.BaseNoteMetadata.Attributes.SourceURL</a></small>
+                                <small><strong>URL:</strong> <a href="@item.BaseNoteMetadata.SourceUrl">@item.BaseNoteMetadata.SourceUrl</a></small>
                             }
                         }
-                        @if (!String.IsNullOrWhiteSpace(item.BaseNoteMetadata.Attributes.SourceApplication))
+                        @if (!String.IsNullOrWhiteSpace(item.BaseNoteMetadata.SourceApplication))
                         {
                             <br />
-                            <small>@item.BaseNoteMetadata.Attributes.SourceApplication</small>
+                            <small>@item.BaseNoteMetadata.SourceApplication</small>
                         }
                     </td>
                     <td>@item.ContentLength</td>

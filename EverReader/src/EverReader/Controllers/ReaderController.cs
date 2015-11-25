@@ -58,23 +58,26 @@ namespace EverReader.Controllers
                 IEvernoteService evernoteService = new EvernoteServiceSDK1(user.EvernoteCredentials);
                 try
                 {
-                    findNotesViewModel.SearchResults = evernoteService.GetNotesMetaList(findNotesViewModel.SearchField);
+                    List<INoteMetadata> notesMetaList = evernoteService.GetNotesMetaList(findNotesViewModel.SearchField);
 
                     if (findNotesViewModel.ExcludeShortNotes)
                     {
-                        findNotesViewModel.SearchResults.RemoveAll(metadata => metadata.BaseNoteMetadata.ContentLength < (1024 * 3));
+                        notesMetaList.RemoveAll(metadata => metadata.ContentLength < (1024 * 3));
                     }
 
                     // now we populate with tags
-                    foreach (EvernoteNodeMetadataDecorator noteMetadata in findNotesViewModel.SearchResults)
+                    foreach (INoteMetadata noteMetadata in notesMetaList)
                     {
-                        if (noteMetadata.BaseNoteMetadata.TagGuids != null)
+                        if (noteMetadata.TagGuids != null)
                         {
-                            noteMetadata.Tags = new List<string>();
+                            List<TagData> tags = _dataAccess.GetCachedTagData(user.Id, noteMetadata.TagGuids);
 
-                            foreach (string tagGuid in noteMetadata.BaseNoteMetadata.TagGuids)
+                            noteMetadata.TagNames = new List<string>();
+
+                            foreach (string tagGuid in noteMetadata.TagGuids)
                             {
-                                TagData tag = _dataAccess.GetTag(user.Id, tagGuid);
+                                TagData tag = tags.FirstOrDefault(t => t.Guid == tagGuid);
+
                                 if (tag == null)
                                 {
                                     // save tag
@@ -82,10 +85,12 @@ namespace EverReader.Controllers
                                     tag = new TagData { Guid = tagGuid, Name = evernoteTag.Name, UserId = user.Id };
                                     _dataAccess.SaveTag(tag);
                                 } 
-                                noteMetadata.Tags.Add(tag.Name);
+                                noteMetadata.TagNames.Add(tag.Name);
                             }
                         }
                     }
+
+                    findNotesViewModel.SearchResults = notesMetaList.ConvertAll(noteMeta => new EverReaderNodeMetadataFormatter(noteMeta));
                 }
                 catch (EvernoteServiceSDK1AuthorisationException)
                 {
@@ -149,28 +154,34 @@ namespace EverReader.Controllers
 
             // convert en-media tags to img tags
             // get a list of image resources, indexed to the MD5SUM hash
-            Dictionary<string, string> hashGuidMapping = new Dictionary<string, string>();
-            foreach (Resource resource in note.Resources)
+            if (note.Resources != null)
             {
-                if (resource.Mime.StartsWith("image") && resource.Data.Size < 1024 * 512)
+                Dictionary<string, string> hashGuidMapping = new Dictionary<string, string>();
+                foreach (Resource resource in note.Resources)
                 {
-                    hashGuidMapping.Add(resource.Data.BodyHash.ToHexString(), resource.Guid);
+                    if (resource.Mime.StartsWith("image") && resource.Data.Size < 1024 * 512)
+                    {
+                        hashGuidMapping.Add(resource.Data.BodyHash.ToHexString(), resource.Guid);
+                    }
+                }
+                // search and replace each resource in the document
+                foreach (string hash in hashGuidMapping.Keys)
+                {
+                    decodedContent = Regex.Replace(decodedContent,
+                        "en-media( [^>]*)? hash=[\"'](" + hash + ")[\"']",
+                        "img $1 src=\"/Reader/NoteResource/" + hashGuidMapping[hash] + "\"");
                 }
             }
-            // search and replace each resource in the document
-            foreach (string hash in hashGuidMapping.Keys)
-            {
-                decodedContent = Regex.Replace(decodedContent,
-                    "en-media( [^>]*)? hash=[\"'](" + hash + ")[\"']",
-                    "img $1 src=\"/Reader/NoteResource/" + hashGuidMapping[hash] + "\"");
-            }
+
+            ENNoteINoteMetadataAdapter erNoteMetaData = new ENNoteINoteMetadataAdapter(note);
+
+            
 
             // Create view model for page
             ReaderViewModel readerViewModel = new ReaderViewModel()
             {
-                Title = note.Title,
+                FormattedNoteMetadata = new EverReaderNodeMetadataFormatter(erNoteMetaData),
                 Content = decodedContent,
-                NoteGuid = note.Guid,
                 PercentageRead = bookmark == null ? 0 : bookmark.PercentageRead
             };
 

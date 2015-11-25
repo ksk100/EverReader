@@ -15,8 +15,8 @@ namespace EverReader.ViewModels.Reader
         public string SearchField { get; set; }
 
         [Display(Name="Exclude short notes?")]
-        public bool ExcludeShortNotes { get; set; }
+        public bool ExcludeShortNotes { get; set; } = true;
 
-        public List<EvernoteNodeMetadataDecorator> SearchResults { get; set; }
+        public List<EverReaderNodeMetadataFormatter> SearchResults { get; set; }
     }
 }

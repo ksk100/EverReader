@@ -133,7 +133,6 @@ $(document).ready(function () {
                     "data": { "percentageRead": documentScrollPercent },
                     "success" : function () {
                         lastSavedScrollTop = savedWinScrollTop;
-                        location.hash = documentScrollPercent;
                     },
                     "error" : function () {
                         // TODO: alert the user their position wasn't saved?
