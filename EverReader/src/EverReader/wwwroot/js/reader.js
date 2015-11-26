@@ -21,6 +21,8 @@ var reader = (function ($, readerInDummyMode) {
 
         var targetScrollTop = (percentage / 100) * (docHeight - winHeight);
         $(window).scrollTop(targetScrollTop);
+
+        self.readerViewModel.documentScrollPercent(percentage);
     }
 
     function getSelection() {
@@ -141,7 +143,6 @@ var reader = (function ($, readerInDummyMode) {
         self.readerViewModel.documentScrollPercent(((savedWinScrollTop) / (savedDocHeight - savedWinHeight)) * 100);
     }
 
-
     // the external interface exposed
     self.calculateDocumentReadPosition = calculateDocumentReadPosition;
     self.getSelection = getSelection;
@@ -161,9 +162,6 @@ $(document).ready(function () {
 
     // attach the scroll handler
     $(window).scroll(null, reader.scrollHandler);
-
-    // zoom to currently read position
-    reader.navigateToPosition(percentageRead);
 
     // setup the view model for KO
     reader.readerViewModel = (function () {
@@ -216,6 +214,9 @@ $(document).ready(function () {
     })();
 
     ko.applyBindings(reader.readerViewModel);
+
+    // zoom to currently read position
+    reader.navigateToPosition(percentageRead);
     
     if (!readerInDummyMode) {
         $.ajax("/api/bookmarks/" + noteGuid, {
