@@ -58,7 +58,14 @@
 @if (Model.SearchResults != null)
 {
         <section>
-            <div>Found <span class="label label-info">@Model.SearchResults.Count</span> matching notes<br /><br /></div>
+            <div>
+                Found <span class="label label-info">@Model.SearchResults.Count</span> matching notes
+                @if (Model.SearchResults.Count != Model.NumberUnfilteredResults) { 
+                    @:(@(Model.NumberUnfilteredResults - Model.SearchResults.Count) 
+                    @: short notes filtered)
+                }
+                <br /><br />
+            </div>
             <table class="table table-striped table-responsive">
                 <tr>
                     <th>Note title</th>

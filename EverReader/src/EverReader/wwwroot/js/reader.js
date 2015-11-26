@@ -1,12 +1,10 @@
 ﻿'use strict';
 
-var lastSavedScrollTop = 0;
-var lastSavedScrollTopResetTimerSet = 0;
-
-var reader = (function ($) {
+var reader = (function ($, readerInDummyMode) {
     var self = { readerViewModel : null };
     var lastSelection = "";
-    var readerViewModel;
+    var lastSavedScrollTop = 0;
+    var lastSavedScrollTopResetTimerSet = 0;
 
     function calculateDocumentReadPosition() {
         var docHeight = $(document).height();
@@ -38,76 +36,66 @@ var reader = (function ($) {
 
     function addBookmark() {
         // - get document percentage read
-        var documentPercentageRead = reader.calculateDocumentReadPosition();
+        var documentPercentageRead = self.calculateDocumentReadPosition();
         // - get selection
-        var lastSelectedText = reader.getSelection() || "[ untitled ]";
+        var lastSelectedText = self.getSelection() || "[ untitled ]";
 
         if (lastSelectedText.length > 30) {
-            lastSelectedText = lastSelectedText.slice(0, lastSelectedText.indexOf(' ', 30) + 1) + "...";
+            lastSelectedText = lastSelectedText.slice(0, 
+                                                     ((lastSelectedText.indexOf(' ', 30) > -1 ? lastSelectedText.indexOf(' ', 30) :
+                                                        (lastSelectedText.lastIndexOf(' ') > -1 ? lastSelectedText.lastIndexOf(' ') : 30)) + 1)) + "...";
         }
 
-        // - save the bookmark
-        $.ajax("/api/bookmarks/" + noteGuid, {
-            "method": "POST",
-            "data": { "percentageRead": documentPercentageRead, "bookmarkTitle" : lastSelectedText },
-            "success": function (data) {
-                self.readerViewModel.addBookmark(data.id, documentPercentageRead, lastSelectedText);
-                everReaderNotify("Bookmark added");
-            },
-            "error": function () {
-                // TODO: alert the user their position wasn't saved?
-            }
-        });
+        if (!readerInDummyMode) {
+            // - save the bookmark
+            $.ajax("/api/bookmarks/" + noteGuid, {
+                "method": "POST",
+                "data": { "percentageRead": documentPercentageRead, "bookmarkTitle": lastSelectedText },
+                "success": function (data) {
+                    self.readerViewModel.addBookmark(data.id, documentPercentageRead, lastSelectedText);
+                    everReaderNotify("Bookmark added");
+                },
+                "error": function () {
+                    // TODO: alert the user their position wasn't saved?
+                }
+            });
+        } else {
+            self.readerViewModel.addBookmark(reader.readerViewModel.bookmarks().length, documentPercentageRead, lastSelectedText);
+            everReaderNotify("Bookmark added");
+        }
 
         return false;
     }
 
     function deleteBookmark(event, id) {
         // delete the bookmark
-        $.ajax("/api/bookmarks/" + noteGuid, {
-            "method": "DELETE",
-            "data": { "id": id },
-            "success": function (data) {
-                if (!data.error) {
-                    self.readerViewModel.deleteBookmark(id);
-                    everReaderNotify("Bookmark deleted");
-                } else {
+        if (!readerInDummyMode) {
+            $.ajax("/api/bookmarks/" + noteGuid, {
+                "method": "DELETE",
+                "data": { "id": id },
+                "success": function (data) {
+                    if (!data.error) {
+                        self.readerViewModel.deleteBookmark(id);
+                        everReaderNotify("Bookmark deleted");
+                    } else {
+                        everReaderNotify("There was a problem deleting your bookmark", "danger");
+                    }
+                },
+                "error": function () {
                     everReaderNotify("There was a problem deleting your bookmark", "danger");
                 }
-            },
-            "error": function () {
-                everReaderNotify("There was a problem deleting your bookmark", "danger");
-            }
-        });
+            });
+        } else {
+            self.readerViewModel.deleteBookmark(id);
+            everReaderNotify("Bookmark deleted");
+        }
 
         event.stopPropagation();
         $("#koContextMenu").remove();
         return false;
     }
 
-
-    // the external interface exposed
-    self.calculateDocumentReadPosition = calculateDocumentReadPosition;
-    self.getSelection = getSelection;
-    self.navigateToPosition = navigateToPosition;
-    self.saveSelection = saveSelection;
-    self.addBookmark = addBookmark;
-    self.deleteBookmark = deleteBookmark;
-
-    return self;
-
-})($);
-
-
-$(document).ready(function () {
-
-    // attach the selection handler
-    $("body").click(reader.saveSelection);
-
-    $("#addBookmark").click(reader.addBookmark);
-
-    // attach the scroll handler
-    $(window).scroll(null, function () {
+    function scrollHandler () {
 
         // save the three positions
         var savedDocHeight = $(document).height();
@@ -129,16 +117,18 @@ $(document).ready(function () {
 
                 var documentScrollPercent = ((savedWinScrollTop) / (savedDocHeight - savedWinHeight)) * 100;
 
-                $.ajax("/api/bookmarks/" + noteGuid, {
-                    "method": "PUT",
-                    "data": { "percentageRead": documentScrollPercent },
-                    "success" : function () {
-                        lastSavedScrollTop = savedWinScrollTop;
-                    },
-                    "error" : function () {
-                        // TODO: alert the user their position wasn't saved?
-                    }
-                });
+                if (!readerInDummyMode) {
+                    $.ajax("/api/bookmarks/" + noteGuid, {
+                        "method": "PUT",
+                        "data": { "percentageRead": documentScrollPercent },
+                        "success": function () {
+                            lastSavedScrollTop = savedWinScrollTop;
+                        },
+                        "error": function () {
+                            // TODO: alert the user their position wasn't saved?
+                        }
+                    });
+                }
             }
 
             // if we would save, but the scroll position is higher up the page (user is scrolling up), then set a timeout to reset the lastSavedScrollTop
@@ -155,8 +145,33 @@ $(document).ready(function () {
 
         }, 700);
 
-        reader.readerViewModel.documentScrollPercent(((savedWinScrollTop) / (savedDocHeight - savedWinHeight)) * 100);
-    });
+        self.readerViewModel.documentScrollPercent(((savedWinScrollTop) / (savedDocHeight - savedWinHeight)) * 100);
+    }
+
+
+    // the external interface exposed
+    self.calculateDocumentReadPosition = calculateDocumentReadPosition;
+    self.getSelection = getSelection;
+    self.navigateToPosition = navigateToPosition;
+    self.saveSelection = saveSelection;
+    self.addBookmark = addBookmark;
+    self.deleteBookmark = deleteBookmark;
+    self.scrollHandler = scrollHandler;
+
+    return self;
+
+})($, readerInDummyMode);
+
+
+$(document).ready(function () {
+
+    // attach the selection handler
+    $("body").click(reader.saveSelection);
+
+    $("#addBookmark").click(reader.addBookmark);
+
+    // attach the scroll handler
+    $(window).scroll(null, reader.scrollHandler);
 
     // zoom to currently read position
     reader.navigateToPosition(percentageRead);
@@ -212,18 +227,19 @@ $(document).ready(function () {
     })();
 
     ko.applyBindings(reader.readerViewModel);
-
-    $.ajax("/api/bookmarks/" + noteGuid, {
-        "method": "GET",
-        "data": { },
-        "success": function (data) {
-            data.forEach(function (bookmark) {
-                reader.readerViewModel.addBookmark(bookmark.Id, bookmark.PercentageRead, bookmark.BookmarkTitle);
-            });
-        },
-        "error": function () {
-            // TODO: alert the user their position wasn't saved?
-        }
-    });
     
+    if (!readerInDummyMode) {
+        $.ajax("/api/bookmarks/" + noteGuid, {
+            "method": "GET",
+            "data": {},
+            "success": function (data) {
+                data.forEach(function (bookmark) {
+                    reader.readerViewModel.addBookmark(bookmark.Id, bookmark.PercentageRead, bookmark.BookmarkTitle);
+                });
+            },
+            "error": function () {
+                // TODO: alert the user their position wasn't saved?
+            }
+        });
+    }
 });

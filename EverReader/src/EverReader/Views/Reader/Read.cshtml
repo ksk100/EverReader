@@ -44,7 +44,7 @@
     <div class="container">
         <div class="btn-toolbar cols-xs-8 cols-sm-8 cols-md-8 pull-left" role="toolbar">
             <button type="button" class="btn btn-default btn-sm" id="addBookmark">Add bookmark</button>
-            <span class="glyphicon glyphicon-info-sign" data-toggle="info-popover" data-trigger="hover" data-content="To name your bookmark, select some text then click 'Add bookmark'" style="top: 2px"></span>
+            <span class="glyphicon glyphicon-info-sign" data-toggle="info-popover" data-placement="top" data-trigger="hover" data-content="To name your bookmark, select some text then click 'Add bookmark'" style="top: 2px"></span>
             &nbsp;
             <button type="button" class="btn btn-default btn-sm" data-bind="contextMenu: bookmarks, bindMenuOnClick: true, bindMenuOnContextMenu: false">Bookmarks</button>
         </div>
@@ -60,6 +60,7 @@
 <script type="text/javascript">
     var noteGuid = "@Model.FormattedNoteMetadata.Guid";
     var percentageRead = @Model.PercentageRead;
+    var readerInDummyMode = false;
 </script>
 
 <link rel="stylesheet" href="~/css/reader.css" />
@@ -69,7 +70,7 @@
 <script src="~/lib/knockout/dist/knockout.debug.js"></script>
 <script src="~/lib/knockout.contextmenu/dist/js/knockout.contextmenu.js"></script>
 <script src="~/lib/moment/moment.js"></script>
-<script src="~/js/reader.js"></script>   
+<script src="~/js/reader.js"></script>
 
 <script>
     $(document).ready(function () {

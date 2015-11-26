@@ -60,6 +60,8 @@ namespace EverReader.Controllers
                 {
                     List<INoteMetadata> notesMetaList = evernoteService.GetNotesMetaList(findNotesViewModel.SearchField);
 
+                    findNotesViewModel.NumberUnfilteredResults = notesMetaList.Count;
+
                     if (findNotesViewModel.ExcludeShortNotes)
                     {
                         notesMetaList.RemoveAll(metadata => metadata.ContentLength < (1024 * 3));
@@ -170,6 +172,10 @@ namespace EverReader.Controllers
                     decodedContent = Regex.Replace(decodedContent,
                         "en-media( [^>]*)? hash=[\"'](" + hash + ")[\"']",
                         "img $1 src=\"/Reader/NoteResource/" + hashGuidMapping[hash] + "\"");
+
+                    decodedContent = Regex.Replace(decodedContent,
+                        "<img([^>]*);height:auto;([^>]*)>",
+                        "<img $1;$2>");
                 }
             }
 

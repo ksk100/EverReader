@@ -4,18 +4,18 @@ EverReader is a web application which enables you to read long-form content stor
 
 ## Get started
 
-At the moment, there is no public hosted version of EverReader available.  To run EverReader, you will need to:
+A hosted version runs at [http://everreader.azurewebsites.net](http://everreader.azurewebsites.net).  This is currently private beta, but you can request access by sending me an email. 
+
+Alternatively, you can run EverReader yourself.  You will need to:
 
 1. Download the code
 2. Get a developer API
 3. Ask for the developer key to be activated on the production server (so you can access your actual notes)
 4. Use Visual Studio 2015 to run the web application.
 
-A hosted version runs at [http://everreader.azurewebsites.net](http://everreader.azurewebsites.net).  This is currently private beta, but you can request access by sending me an email. 
-
 ## Architecture
 
-EverReader runs on ASP.NET 5 (developed using beta8) and is written in `C#` and `Javascript`.
+EverReader runs on `ASP.NET 5` (developed using `beta8`) and uses `jQuery`, `knockout.js` and `bootstrap`.  It is written in `C#` and `Javascript`.
 
 ## Screenshots
 

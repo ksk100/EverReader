@@ -18,5 +18,7 @@ namespace EverReader.ViewModels.Reader
         public bool ExcludeShortNotes { get; set; } = true;
 
         public List<EverReaderNodeMetadataFormatter> SearchResults { get; set; }
+
+        public int NumberUnfilteredResults { get; set; }
     }
 }

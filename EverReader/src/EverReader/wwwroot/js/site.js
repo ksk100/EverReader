@@ -1,4 +1,4 @@
-﻿function everReaderNotify(message, type) {
+﻿function everReaderNotify(message, type, delay) {
 
     $.notify({
         message : message
@@ -8,7 +8,9 @@
             from: "bottom",
             align: "center"
         },
-        delay: 2500,
+        delay: delay || 2500,
+        offset: { y: 50 },
+        z_index : 1000,
         animate: {
             enter: 'animated fadeInDown',
             exit: 'animated fadeOutUp'
