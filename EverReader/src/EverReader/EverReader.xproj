@@ -19,4 +19,9 @@
     <ProjectReference Include="..\..\..\..\AsyncOAuth.Evernote.Simple\AsyncOAuth.Evernote.Simple\AsyncOAuth.Evernote.Simple.csproj" />
   </ItemGroup>
   <Import Project="$(VSToolsPath)\DNX\Microsoft.DNX.targets" Condition="'$(VSToolsPath)' != ''" />
+  <ProjectExtensions>
+    <VisualStudio>
+      <UserProperties />
+    </VisualStudio>
+  </ProjectExtensions>
 </Project>

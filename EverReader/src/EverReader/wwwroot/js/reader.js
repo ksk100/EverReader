@@ -23,36 +23,29 @@ var reader = (function ($, readerInDummyMode) {
         $(window).scrollTop(targetScrollTop);
     }
 
-    function saveSelection() {
-        var selection = window.getSelection().toString();
-        if (selection != "") {
-            lastSelection = selection;
-        }
-    }
-
     function getSelection() {
-        return lastSelection;
+        return window.getSelection().toString();
     }
 
     function addBookmark() {
         // - get document percentage read
         var documentPercentageRead = self.calculateDocumentReadPosition();
         // - get selection
-        var lastSelectedText = self.getSelection() || "[ untitled ]";
+        var selectedText = self.getSelection() || "[ untitled ]";
 
-        if (lastSelectedText.length > 30) {
-            lastSelectedText = lastSelectedText.slice(0, 
-                                                     ((lastSelectedText.indexOf(' ', 30) > -1 ? lastSelectedText.indexOf(' ', 30) :
-                                                        (lastSelectedText.lastIndexOf(' ') > -1 ? lastSelectedText.lastIndexOf(' ') : 30)) + 1)) + "...";
+        if (selectedText.length > 30) {
+            selectedText = selectedText.slice(0,
+                                             ((selectedText.indexOf(' ', 30) > -1 ? selectedText.indexOf(' ', 30) :
+                                              (selectedText.lastIndexOf(' ') > -1 ? selectedText.lastIndexOf(' ') : 30)) + 1)) + "...";
         }
 
         if (!readerInDummyMode) {
             // - save the bookmark
             $.ajax("/api/bookmarks/" + noteGuid, {
                 "method": "POST",
-                "data": { "percentageRead": documentPercentageRead, "bookmarkTitle": lastSelectedText },
+                "data": { "percentageRead": documentPercentageRead, "bookmarkTitle": selectedText },
                 "success": function (data) {
-                    self.readerViewModel.addBookmark(data.id, documentPercentageRead, lastSelectedText);
+                    self.readerViewModel.addBookmark(data.id, documentPercentageRead, selectedText);
                     everReaderNotify("Bookmark added");
                 },
                 "error": function () {
@@ -60,7 +53,7 @@ var reader = (function ($, readerInDummyMode) {
                 }
             });
         } else {
-            self.readerViewModel.addBookmark(reader.readerViewModel.bookmarks().length, documentPercentageRead, lastSelectedText);
+            self.readerViewModel.addBookmark(reader.readerViewModel.bookmarks().length, documentPercentageRead, selectedText);
             everReaderNotify("Bookmark added");
         }
 
@@ -153,7 +146,6 @@ var reader = (function ($, readerInDummyMode) {
     self.calculateDocumentReadPosition = calculateDocumentReadPosition;
     self.getSelection = getSelection;
     self.navigateToPosition = navigateToPosition;
-    self.saveSelection = saveSelection;
     self.addBookmark = addBookmark;
     self.deleteBookmark = deleteBookmark;
     self.scrollHandler = scrollHandler;
@@ -164,9 +156,6 @@ var reader = (function ($, readerInDummyMode) {
 
 
 $(document).ready(function () {
-
-    // attach the selection handler
-    $("body").click(reader.saveSelection);
 
     $("#addBookmark").click(reader.addBookmark);
 
