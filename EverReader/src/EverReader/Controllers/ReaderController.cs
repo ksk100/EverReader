@@ -45,8 +45,19 @@ namespace EverReader.Controllers
             return View("FindNotes", new FindNotesViewModel());
         }
 
+        [Route("Reader/Search/{exclude:bool}/{search}")]
+        public async Task<IActionResult> Search(bool exclude, string search)
+        {
+            return await PerformSearch(new FindNotesViewModel() { ExcludeShortNotes = exclude, SearchField = WebUtility.UrlDecode(search) });
+        }
+
         [HttpPost]
         public async Task<IActionResult> Index(FindNotesViewModel findNotesViewModel)
+        {
+            return await PerformSearch(findNotesViewModel);
+        }
+
+        private async Task<IActionResult> PerformSearch(FindNotesViewModel findNotesViewModel)
         {
             ApplicationUser user = await ControllerHelpers.GetCurrentUserAsync(_userManager, _dataAccess, HttpContext.User.GetUserId());
             if (user.EvernoteCredentials == null)
@@ -86,7 +97,7 @@ namespace EverReader.Controllers
                                     Tag evernoteTag = evernoteService.GetTag(tagGuid);
                                     tag = new TagData { Guid = tagGuid, Name = evernoteTag.Name, UserId = user.Id };
                                     _dataAccess.SaveTag(tag);
-                                } 
+                                }
                                 noteMetadata.TagNames.Add(tag.Name);
                             }
                         }

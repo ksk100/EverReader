@@ -59,11 +59,16 @@
 {
         <section>
             <div>
-                Found <span class="label label-info">@Model.SearchResults.Count</span> matching notes
+                Found <span class="label label-info">@Model.SearchResults.Count</span> matching 
                 @if (Model.SearchResults.Count != Model.NumberUnfilteredResults) { 
+                    @:notes 
                     @:(@(Model.NumberUnfilteredResults - Model.SearchResults.Count) 
-                    @: short notes filtered)
+                    @: short notes filtered).
+                } else {
+                    @:notes.
                 }
+                &nbsp;&nbsp;<a asp-action="Search" asp-controller="Reader" asp-route-exclude="@Model.ExcludeShortNotes" asp-route-search="@Model.SearchField">Permalink to this search</a>.
+                <span class="glyphicon glyphicon-info-sign" data-toggle="info-popover" data-placement="top" data-trigger="hover" data-content="Tip: to save this search, bookmark the permalink" style="top: 2px"></span>
                 <br /><br />
             </div>
             <table class="table table-striped table-responsive">
