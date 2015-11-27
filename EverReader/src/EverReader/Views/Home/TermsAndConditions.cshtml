@@ -807,20 +807,7 @@
     by using our website contact form.
 </p>
 
-<div class="navbar-default navbar-fixed-bottom">
-    <div class="container">
-        <div class="btn-toolbar cols-xs-8 cols-sm-8 cols-md-8 pull-left" role="toolbar">
-            <button type="button" class="btn btn-default btn-sm" id="addBookmark">Add bookmark</button>
-            <span class="glyphicon glyphicon-info-sign" data-toggle="info-popover" data-placement="top" data-trigger="hover" data-content="To name your bookmark, select some text then click 'Add bookmark'" style="top: 2px"></span>
-            &nbsp;
-            <button type="button" class="btn btn-default btn-sm" data-bind="contextMenu: bookmarks, bindMenuOnClick: true, bindMenuOnContextMenu: false">Bookmarks</button>
-        </div>
-        <div class="cols-xs-4 cols-sm-4 cols-md-4 pull-right" style="padding-top: 8px">
-            <span id="positionReport" class="navbar-inverse-text-color pull-left" data-bind="text: documentScrollPercentFormatted()"></span>
-            <span class="navbar-inverse-text-color hidden-xs pull-right">&nbsp;through document</span>
-        </div>
-    </div>
-</div>
+@Html.Partial("_ReaderFooter")
 
 @section scripts {
 

@@ -1,7 +1,7 @@
 ﻿@model EverReader.ViewModels.Reader.FindNotesViewModel
 
 @{
-    ViewBag.Title = "Find notes";
+    ViewBag.Title = String.IsNullOrEmpty(Model.SearchField) ? "Find notes" : Model.SearchField + " - Find notes";
 }
 
 <h2>@ViewData["Title"]</h2>
