@@ -73,6 +73,12 @@ namespace EverReader.DataAccess
             return _dbContext.Tags.Where(t => t.UserId == userId && tagGuids.Contains(t.Guid)).ToList();
         }
 
+        public string GetCachedNotebookName(string userId, string notebookGuid)
+        {
+            NotebookData notebookData = _dbContext.Notebooks.Where(n => n.UserId == userId && n.Guid == notebookGuid).FirstOrDefault();
+            return (notebookData == null) ? null : notebookData.Name;
+        }
+
         public TagData GetTag(string userId, string tagGuid)
         {
             return _dbContext.Tags.Where(t => t.UserId == userId && t.Guid == tagGuid).SingleOrDefault();
@@ -81,6 +87,12 @@ namespace EverReader.DataAccess
         public void SaveTag(TagData tag)
         {
             _dbContext.Tags.Add(tag);
+            _dbContext.SaveChanges();
+        }
+
+        public void SaveNotebook(NotebookData notebook)
+        {
+            _dbContext.Notebooks.Add(notebook);
             _dbContext.SaveChanges();
         }
 

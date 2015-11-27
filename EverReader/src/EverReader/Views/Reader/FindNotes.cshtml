@@ -63,18 +63,18 @@
                 @if (Model.SearchResults.Count != Model.NumberUnfilteredResults) { 
                     @:notes 
                     @:(@(Model.NumberUnfilteredResults - Model.SearchResults.Count) 
-                    @: short notes filtered).
+                    @: short notes filtered).&nbsp;
                 } else {
-                    @:notes.
+                    @:notes.&nbsp;
                 }
-                &nbsp;&nbsp;<a asp-action="Search" asp-controller="Reader" asp-route-exclude="@Model.ExcludeShortNotes" asp-route-search="@Model.SearchField">Permalink to this search</a>.
+                <a asp-action="Search" asp-controller="Reader" asp-route-exclude="@Model.ExcludeShortNotes" asp-route-search="@Model.SearchField">Permalink to this search</a>.
                 <span class="glyphicon glyphicon-info-sign" data-toggle="info-popover" data-placement="top" data-trigger="hover" data-content="Tip: to save this search, bookmark the permalink" style="top: 2px"></span>
                 <br /><br />
             </div>
             <table class="table table-striped table-responsive">
                 <tr>
                     <th>Note title</th>
-                    <th>Length</th>
+                    <th class="hidden-xs">Length</th>
                     <th class="hidden-xs hidden-sm">Created</th>
                     <th class="hidden-xs">Updated</th>
                 </tr>
@@ -83,6 +83,17 @@
                 <tr>
                     <td>
                         <strong><a asp-action="Read" asp-controller="Reader" asp-route-guid="@item.Guid">@item.Title</a></strong>
+                        <br />
+                        <small><strong>Notebook:</strong> @item.BaseNoteMetadata.NotebookName</small>
+                        @*<div class="grid">
+                            <div class="row">
+                                <div class="col-md-3" style="display:inline-block; float: none">
+                                    <small><strong>Notebook:</strong> @item.BaseNoteMetadata.NotebookName</small>
+                                </div>
+                                <div class="col-md-6" style="display:inline-block; float: none">
+                                </div>
+                            </div>
+                        </div>*@
                         @if (item.TagNames != null && item.TagNames.Count > 0)
                         {
                             <br />
@@ -98,16 +109,22 @@
                             if (!item.BaseNoteMetadata.SourceUrl.StartsWith("file://"))
                             {
                                 <br />
-                                <small><strong>URL:</strong> <a href="@item.BaseNoteMetadata.SourceUrl">@item.BaseNoteMetadata.SourceUrl</a></small>
+                                <span class="hidden-xs hidden-sm">
+                                    <small><strong>URL:</strong> <a href="@item.BaseNoteMetadata.SourceUrl">@item.BaseNoteMetadata.SourceUrl</a></small>
+                                </span>
+                                <span class="visible-xs visible-sm">
+                                    <small><strong><a href="@item.BaseNoteMetadata.SourceUrl">Source URL</a></strong></small>
+                                </span>
                             }
                         }
                         @if (!String.IsNullOrWhiteSpace(item.BaseNoteMetadata.SourceApplication))
                         {
                             <br />
                             <small>@item.BaseNoteMetadata.SourceApplication</small>
-                        }
+                        }                     
+                        <span class="visible-xs"><small><strong>Length: </strong>@item.ContentLength</small></span>
                     </td>
-                    <td>@item.ContentLength</td>
+                    <td class="hidden-xs">@item.ContentLength</td>
                     <td class="hidden-xs hidden-sm">@item.CreatedDateTime.ToShortDateString()</td>
                     <td class="hidden-xs">@item.UpdatedDateTime.ToShortDateString()</td>
                 </tr>

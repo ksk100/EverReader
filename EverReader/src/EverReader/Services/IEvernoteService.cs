@@ -14,5 +14,6 @@ namespace EverReader.Services
         Note GetNote(string guid);
         Resource GetResource(string resourceGuid);
         Tag GetTag(string tagGuid);
+        Notebook GetNotebook(string notebookGuid);
     }
 }

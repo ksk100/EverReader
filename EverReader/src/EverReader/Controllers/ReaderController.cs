@@ -78,7 +78,7 @@ namespace EverReader.Controllers
                         notesMetaList.RemoveAll(metadata => metadata.ContentLength < (1024 * 3));
                     }
 
-                    // now we populate with tags
+                    // now we populate with tags and notebook name
                     foreach (INoteMetadata noteMetadata in notesMetaList)
                     {
                         if (noteMetadata.TagGuids != null)
@@ -100,6 +100,15 @@ namespace EverReader.Controllers
                                 }
                                 noteMetadata.TagNames.Add(tag.Name);
                             }
+                        }
+
+                        noteMetadata.NotebookName = _dataAccess.GetCachedNotebookName(user.Id, noteMetadata.NotebookGuid);
+                        if (noteMetadata.NotebookName == null)
+                        {
+                            Notebook notebook = evernoteService.GetNotebook(noteMetadata.NotebookGuid);
+                            noteMetadata.NotebookName = notebook.Name;
+                            NotebookData notebookData = new NotebookData() { UserId = user.Id, Guid = noteMetadata.NotebookGuid, Name = notebook.Name };
+                            _dataAccess.SaveNotebook(notebookData);
                         }
                     }
 

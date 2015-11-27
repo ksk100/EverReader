@@ -112,5 +112,25 @@ namespace EverReader.Services
 
             return tag;
         }
+
+        public Notebook GetNotebook(string notebookGuid)
+        {
+            Notebook notebook;
+
+            try
+            {
+                notebook = noteStore.getNotebook(credentials.AuthToken, notebookGuid);
+            }
+            catch (EDAMUserException)
+            {
+                throw new EvernoteServiceSDK1AuthorisationException();
+            }
+            catch (EDAMNotFoundException)
+            {
+                throw new EvernoteServiceSDK1NoteNotFoundException();
+            }
+
+            return notebook;
+        }
     }
 }

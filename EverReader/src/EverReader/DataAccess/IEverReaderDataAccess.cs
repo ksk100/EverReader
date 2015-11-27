@@ -31,5 +31,9 @@ namespace EverReader.DataAccess
         List<Bookmark> GetRecentlyRead(string userId);
 
         List<Bookmark> GetManualBookmarks(string userId, string guid);
+
+        string GetCachedNotebookName(string userId, string notebookGuid);
+
+        void SaveNotebook(NotebookData notebook);
     }
 }

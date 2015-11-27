@@ -17,5 +17,7 @@ namespace EverReader.Models
         string SourceUrl { get; }
         string SourceApplication { get; }
         int ContentLength { get; }
+        string NotebookGuid { get; }
+        string NotebookName { get; set; }
     }
 }

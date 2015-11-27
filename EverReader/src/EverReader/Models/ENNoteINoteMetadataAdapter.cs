@@ -9,12 +9,14 @@ namespace EverReader.Models
 
         public List<string> TagNames { get; set; }
         public List<string> TagGuids { get { return _enNote.TagGuids; } }
+        public string NotebookName { get; set; }
 
         public string Title { get { return _enNote.Title; } }
         public string Guid { get { return _enNote.Guid; } }
         public int ContentLength { get { return _enNote.ContentLength; } }
         public long Created { get { return _enNote.Created; } }
         public long Updated { get { return _enNote.Updated; } }
+        public string NotebookGuid { get { return _enNote.NotebookGuid; } }
 
         public string Source { get { return _enNote.Attributes.Source; } }
         public string SourceUrl { get { return _enNote.Attributes.SourceURL; } }
