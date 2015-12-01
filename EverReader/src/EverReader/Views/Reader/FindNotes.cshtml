@@ -1,4 +1,6 @@
 ﻿@model EverReader.ViewModels.Reader.FindNotesViewModel
+@using Evernote.EDAM.Type
+@using EverReader.ViewModels.Reader
 
 @{
     ViewBag.Title = String.IsNullOrEmpty(Model.SearchField) ? "Find notes" : Model.SearchField + " - Find notes";
@@ -38,10 +40,43 @@
                     </div>
                 </div>
                 <div class="form-group">
+                    <label asp-for="SortOrder" class="col-md-2 control-label"></label>
+                    <div class="col-md-10">
+                        <div class="input-group">
+
+                            <select name="SortOrder" id="SortOrder" class="form-control">
+                                @foreach (FindNotesViewModel.NoteSortOrderFormatted option in Model.SortOrderOptions)
+                                {
+                                    if (option.Value == Model.SortOrder)
+                                    {
+                                        <option value="@option.Value" selected>@option.Name</option>
+                                    }
+                                    else
+                                    {
+                                        <option value="@option.Value">@option.Name</option>
+                                    }
+                                }
+                            </select>
+                            <span asp-validation-for="SortOrder" class="text-danger"></span>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label asp-for="SortAscending" class="col-md-2 control-label"></label>
+                    <div class="col-md-10">
+                        <div class="input-group">
+
+                            <input asp-for="SortAscending" class="form-control-checkbox" />
+
+                            &nbsp;<span asp-validation-for="SortAscending" class="text-danger"></span>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
                     <label asp-for="ExcludeShortNotes" class="col-md-2 control-label"></label>
                     <div class="col-md-10">
                         <div class="input-group">
-                            
+
                             <input asp-for="ExcludeShortNotes" class="form-control-checkbox" />
 
                             &nbsp;<span asp-validation-for="ExcludeShortNotes" class="text-danger"></span>
@@ -67,7 +102,7 @@
                 } else {
                     @:notes.&nbsp;
                 }
-                <a asp-action="Search" asp-controller="Reader" asp-route-exclude="@Model.ExcludeShortNotes" asp-route-search="@Model.SearchField">Permalink to this search</a>.
+                <a asp-action="Search" asp-controller="Reader" asp-route-exclude="@Model.ExcludeShortNotes"  asp-route-sortOrder="@Model.SortOrder"  asp-route-sortAscending="@Model.SortAscending" asp-route-search="@Model.SearchField">Permalink to this search</a>.
                 <span class="glyphicon glyphicon-info-sign" data-toggle="info-popover" data-placement="top" data-trigger="hover" data-content="Tip: to save this search, bookmark the permalink" style="top: 2px"></span>
                 <br /><br />
             </div>

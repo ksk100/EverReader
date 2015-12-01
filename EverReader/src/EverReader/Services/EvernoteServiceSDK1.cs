@@ -25,10 +25,12 @@ namespace EverReader.Services
             noteStore = new NoteStore.Client(noteStoreProtocol);
         }
 
-        public List<INoteMetadata> GetNotesMetaList(string searchString)
+        public List<INoteMetadata> GetNotesMetaList(string searchString, NoteSortOrder sortOrder, bool ascending)
         {
             NoteFilter noteFilter = new NoteFilter();
             noteFilter.Words = searchString;
+            noteFilter.Order = (int)sortOrder;
+            noteFilter.Ascending = ascending;
 
             NotesMetadataResultSpec resultsSpec = new NotesMetadataResultSpec();
             resultsSpec.IncludeTitle = true;

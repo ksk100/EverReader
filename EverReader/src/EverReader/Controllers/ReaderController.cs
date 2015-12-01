@@ -45,10 +45,15 @@ namespace EverReader.Controllers
             return View("FindNotes", new FindNotesViewModel());
         }
 
-        [Route("Reader/Search/{exclude:bool}/{search}")]
-        public async Task<IActionResult> Search(bool exclude, string search)
+        [Route("Reader/Search/{exclude:bool}/{sortOrder:int}/{sortAscending:bool}/{search}")]
+        public async Task<IActionResult> Search(bool exclude, int sortOrder, bool sortAscending, string search)
         {
-            return await PerformSearch(new FindNotesViewModel() { ExcludeShortNotes = exclude, SearchField = WebUtility.UrlDecode(search) });
+            return await PerformSearch(new FindNotesViewModel() {
+                ExcludeShortNotes = exclude,
+                SortOrder = sortOrder,
+                SortAscending = sortAscending,
+                SearchField = WebUtility.UrlDecode(search)
+            });
         }
 
         [HttpPost]
@@ -69,7 +74,10 @@ namespace EverReader.Controllers
                 IEvernoteService evernoteService = new EvernoteServiceSDK1(user.EvernoteCredentials);
                 try
                 {
-                    List<INoteMetadata> notesMetaList = evernoteService.GetNotesMetaList(findNotesViewModel.SearchField);
+                    List<INoteMetadata> notesMetaList = evernoteService.GetNotesMetaList(
+                        findNotesViewModel.SearchField, 
+                        (Evernote.EDAM.Type.NoteSortOrder)findNotesViewModel.SortOrder, 
+                        findNotesViewModel.SortAscending);
 
                     findNotesViewModel.NumberUnfilteredResults = notesMetaList.Count;
 

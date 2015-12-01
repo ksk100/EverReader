@@ -10,7 +10,7 @@ namespace EverReader.Services
 {
     interface IEvernoteService
     {
-        List<INoteMetadata> GetNotesMetaList(string searchString);
+        List<INoteMetadata> GetNotesMetaList(string searchString, NoteSortOrder sortOrder, bool ascending);
         Note GetNote(string guid);
         Resource GetResource(string resourceGuid);
         Tag GetTag(string tagGuid);
