@@ -15,8 +15,8 @@ namespace EverReader.ViewModels.Reader
         [Required(ErrorMessage = "Please enter a search string")]
         public string SearchField { get; set; }
 
-        [Display(Name="Sort order")]
-        public int SortOrder { get; set; }
+        [Display(Name = "Sort order")]
+        public int SortOrder { get; set; } = 3;
 
         public List<NoteSortOrderFormatted> SortOrderOptions { get; set; }
 
@@ -26,11 +26,47 @@ namespace EverReader.ViewModels.Reader
         [Display(Name="Exclude short notes?")]
         public bool ExcludeShortNotes { get; set; } = true;
 
-        public List<EverReaderNodeMetadataFormatter> SearchResults { get; set; }
+        public List<EverReaderNodeMetadataFormatter> SearchResults { get; set; } = new List<EverReaderNodeMetadataFormatter>();
 
         public int NumberUnfilteredResults { get; set; }
 
         public int TotalResultsForSearch { get; set; }
+
+        public int CurrentResultsPage { get; set; } = 1;
+
+        public int NumberResultsExcluded
+        {
+            get
+            {
+                return NumberUnfilteredResults - SearchResults.Count;
+            }
+        }
+
+        public int NumberOfResultsPages
+        {
+            get
+            {
+                return (int)Math.Ceiling((double)TotalResultsForSearch / PageSize);
+            }
+        }
+
+        public int ResultsRangeMin
+        {
+            get
+            {
+                return (CurrentResultsPage - 1) * PageSize + 1;
+            }
+        }
+
+        public int ResultsRangeMax
+        {
+            get
+            {
+                return (CurrentResultsPage - 1) * PageSize + NumberUnfilteredResults;
+            }
+        }
+
+        public int PageSize { get; set; } = 100;
 
         public FindNotesViewModel()
         {

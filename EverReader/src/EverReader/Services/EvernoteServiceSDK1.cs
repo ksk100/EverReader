@@ -25,7 +25,7 @@ namespace EverReader.Services
             noteStore = new NoteStore.Client(noteStoreProtocol);
         }
 
-        public List<INoteMetadata> GetNotesMetaList(string searchString, NoteSortOrder sortOrder, bool ascending)
+        public ISearchResults GetNotesMetaList(string searchString, NoteSortOrder sortOrder, bool ascending, int resultsPage, int pageSize)
         {
             NoteFilter noteFilter = new NoteFilter();
             noteFilter.Words = searchString;
@@ -44,7 +44,10 @@ namespace EverReader.Services
             NotesMetadataList noteMetadataList;
 
             try {
-                noteMetadataList = noteStore.findNotesMetadata(credentials.AuthToken, noteFilter, 0, 100, resultsSpec);
+                if (resultsPage < 1) resultsPage = 1;
+                if (pageSize > 100) pageSize = 100;
+
+                noteMetadataList = noteStore.findNotesMetadata(credentials.AuthToken, noteFilter, (resultsPage - 1) * pageSize, pageSize, resultsSpec);
             }
             catch (EDAMUserException)
             {
@@ -54,7 +57,10 @@ namespace EverReader.Services
             List<ENNoteMetadataINoteMetadataAdapter> notesMetaWrapperList = 
                 noteMetadataList.Notes.ConvertAll(noteMeta => new ENNoteMetadataINoteMetadataAdapter(noteMeta));
 
-            return notesMetaWrapperList.ToList<INoteMetadata>();
+            return new SearchResults() {
+                        NotesMetadata = notesMetaWrapperList.ToList<INoteMetadata>(),
+                        TotalResults = noteMetadataList.TotalNotes
+                    };
         }
 
         public Note GetNote(string guid)

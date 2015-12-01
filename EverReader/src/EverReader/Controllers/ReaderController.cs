@@ -45,14 +45,15 @@ namespace EverReader.Controllers
             return View("FindNotes", new FindNotesViewModel());
         }
 
-        [Route("Reader/Search/{exclude:bool}/{sortOrder:int}/{sortAscending:bool}/{search}")]
-        public async Task<IActionResult> Search(bool exclude, int sortOrder, bool sortAscending, string search)
+        [Route("Reader/Search/{exclude:bool}/{sortOrder:range(1,5)}/{sortAscending:bool}/{search}/{page:min(1)?}")]
+        public async Task<IActionResult> Search(bool exclude, int sortOrder, bool sortAscending, string search, int page = 1)
         {
             return await PerformSearch(new FindNotesViewModel() {
                 ExcludeShortNotes = exclude,
-                SortOrder = sortOrder,
+                SortOrder = sortOrder == 4 ? 1 : sortOrder, // we don't allow 4, because there is no sort order we want to use for that
                 SortAscending = sortAscending,
-                SearchField = WebUtility.UrlDecode(search)
+                SearchField = WebUtility.UrlDecode(search),
+                CurrentResultsPage = page
             });
         }
 
@@ -74,20 +75,22 @@ namespace EverReader.Controllers
                 IEvernoteService evernoteService = new EvernoteServiceSDK1(user.EvernoteCredentials);
                 try
                 {
-                    List<INoteMetadata> notesMetaList = evernoteService.GetNotesMetaList(
+                    ISearchResults searchResults = evernoteService.GetNotesMetaList(
                         findNotesViewModel.SearchField, 
                         (Evernote.EDAM.Type.NoteSortOrder)findNotesViewModel.SortOrder, 
-                        findNotesViewModel.SortAscending);
+                        findNotesViewModel.SortAscending,
+                        findNotesViewModel.CurrentResultsPage,
+                        findNotesViewModel.PageSize);
 
-                    findNotesViewModel.NumberUnfilteredResults = notesMetaList.Count;
+                    findNotesViewModel.NumberUnfilteredResults = searchResults.NotesMetadata.Count;
 
                     if (findNotesViewModel.ExcludeShortNotes)
                     {
-                        notesMetaList.RemoveAll(metadata => metadata.ContentLength < (1024 * 3));
+                        searchResults.NotesMetadata.RemoveAll(metadata => metadata.ContentLength < (1024 * 3));
                     }
 
                     // now we populate with tags and notebook name
-                    foreach (INoteMetadata noteMetadata in notesMetaList)
+                    foreach (INoteMetadata noteMetadata in searchResults.NotesMetadata)
                     {
                         if (noteMetadata.TagGuids != null)
                         {
@@ -120,7 +123,8 @@ namespace EverReader.Controllers
                         }
                     }
 
-                    findNotesViewModel.SearchResults = notesMetaList.ConvertAll(noteMeta => new EverReaderNodeMetadataFormatter(noteMeta));
+                    findNotesViewModel.SearchResults = searchResults.NotesMetadata.ConvertAll(noteMeta => new EverReaderNodeMetadataFormatter(noteMeta));
+                    findNotesViewModel.TotalResultsForSearch = searchResults.TotalResults;
                 }
                 catch (EvernoteServiceSDK1AuthorisationException)
                 {
