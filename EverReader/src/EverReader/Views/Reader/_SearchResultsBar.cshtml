@@ -1,0 +1,31 @@
+﻿<div class="search-results-section">
+    Found <span class="label label-info">@Model.TotalResultsForSearch</span> total results.
+    @if (!Model.ExcludeShortNotes || Model.NumberResultsExcluded == 0)
+    {
+        @:Showing results <span class="label label-info">@Model.ResultsRangeMin - @Model.ResultsRangeMax</span>.
+                }
+    else
+    {
+        @:Showing <span class="label label-info">@Model.SearchResults.Count</span> notes from range
+        <span class="label label-info">@Model.ResultsRangeMin - @Model.ResultsRangeMax</span>
+                @:(@Model.NumberResultsExcluded short notes filtered).
+                }
+    <a asp-action="Search" asp-controller="Reader" asp-route-exclude="@Model.ExcludeShortNotes" asp-route-sortOrder="@Model.SortOrder" asp-route-sortAscending="@Model.SortAscending" asp-route-search="@Model.SearchField">Permalink to this search</a>.
+    <span class="glyphicon glyphicon-info-sign" data-toggle="info-popover" data-placement="top" data-trigger="hover" data-content="Tip: to save this search, bookmark the permalink" style="top: 2px"></span>
+</div>
+<div class="search-results-section">
+    Results pages:
+    @for (int i = 1; i <= Model.NumberOfResultsPages; i++)
+    {
+        if (i == Model.CurrentResultsPage)
+        {
+            <span class="active-page">@i</span>
+        }
+        else
+        {
+            <span class="inactive-page">
+                <a asp-action="Search" asp-controller="Reader" asp-route-exclude="@Model.ExcludeShortNotes" asp-route-sortOrder="@Model.SortOrder" asp-route-sortAscending="@Model.SortAscending" asp-route-search="@Model.SearchField" asp-route-page="@i">@i</a>
+            </span>
+        }
+    }
+</div>

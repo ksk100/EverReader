@@ -1,0 +1,18 @@
+﻿
+
+div.search-results-section {
+    padding-bottom: 8px;
+}
+
+.search-results-section span {
+    padding-right: 4px;
+}
+
+.search-results-section span.active-page {
+    font-weight: bold;
+}
+
+table.table {
+    margin-bottom: 0px;
+}
+

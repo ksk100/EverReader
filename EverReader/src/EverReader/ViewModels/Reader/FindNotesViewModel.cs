@@ -34,6 +34,8 @@ namespace EverReader.ViewModels.Reader
 
         public int CurrentResultsPage { get; set; } = 1;
 
+        public bool SearchPerformed { get; set; } = false;
+
         public int NumberResultsExcluded
         {
             get

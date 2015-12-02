@@ -90,29 +90,10 @@
                 </div>
             </form>
         </section>
-@if (Model.SearchResults != null)
+@if (Model.SearchPerformed)
 {
         <section>
-            <div style="padding-bottom: 8px">
-                Found <span class="label label-info">@Model.TotalResultsForSearch</span> total results.
-                @if (!Model.ExcludeShortNotes || Model.SearchResults.Count == Model.NumberUnfilteredResults)
-                {
-                    @:Showing results <span class="label label-info">@Model.ResultsRangeMin - @Model.ResultsRangeMax</span>.
-                } else {
-                   @:Showing <span class="label label-info">@Model.SearchResults.Count</span> notes from range 
-                   <span class="label label-info">@Model.ResultsRangeMin - @Model.ResultsRangeMax</span>
-                   @:(@Model.NumberResultsExcluded short notes filtered).
-                }
-                <a asp-action="Search" asp-controller="Reader" asp-route-exclude="@Model.ExcludeShortNotes"  asp-route-sortOrder="@Model.SortOrder"  asp-route-sortAscending="@Model.SortAscending" asp-route-search="@Model.SearchField">Permalink to this search</a>.
-                <span class="glyphicon glyphicon-info-sign" data-toggle="info-popover" data-placement="top" data-trigger="hover" data-content="Tip: to save this search, bookmark the permalink" style="top: 2px"></span>
-            </div>
-            <div style="padding-bottom: 8px">
-                Pages:
-                @for (int i = 1; i <= Model.NumberOfResultsPages; i++)
-                {
-                    <a asp-action="Search" asp-controller="Reader" asp-route-exclude="@Model.ExcludeShortNotes" asp-route-sortOrder="@Model.SortOrder" asp-route-sortAscending="@Model.SortAscending" asp-route-search="@Model.SearchField" asp-route-page="@i">@i</a>@:&nbsp;
-                }
-            </div>
+            @Html.Partial("_SearchResultsBar")
             <table class="table table-striped table-responsive">
                 <tr>
                     <th>Note title</th>
@@ -127,15 +108,6 @@
                         <strong><a asp-action="Read" asp-controller="Reader" asp-route-guid="@item.Guid">@item.Title</a></strong>
                         <br />
                         <small><strong>Notebook:</strong> @item.BaseNoteMetadata.NotebookName</small>
-                        @*<div class="grid">
-                            <div class="row">
-                                <div class="col-md-3" style="display:inline-block; float: none">
-                                    <small><strong>Notebook:</strong> @item.BaseNoteMetadata.NotebookName</small>
-                                </div>
-                                <div class="col-md-6" style="display:inline-block; float: none">
-                                </div>
-                            </div>
-                        </div>*@
                         @if (item.TagNames != null && item.TagNames.Count > 0)
                         {
                             <br />
@@ -172,6 +144,11 @@
                 </tr>
                 }
             </table>
+            @if (Model.SearchResults.Count > 10)
+            {
+                <hr style="margin-top: 0px; margin-bottom: 20px" />
+                @Html.Partial("_SearchResultsBar")
+            }
         </section>
 }
 
@@ -184,6 +161,8 @@
 </div>
 
 @section scripts {
+<link rel="stylesheet" href="~/css/find-notes.css" />
+
 <script>
     $(document).ready(function () {
         $('[data-toggle="info-popover"]').popover();

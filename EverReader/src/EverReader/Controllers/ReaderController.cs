@@ -72,6 +72,8 @@ namespace EverReader.Controllers
             }
             if (ModelState.IsValid)
             {
+                findNotesViewModel.SearchPerformed = true;
+
                 IEvernoteService evernoteService = new EvernoteServiceSDK1(user.EvernoteCredentials);
                 try
                 {
