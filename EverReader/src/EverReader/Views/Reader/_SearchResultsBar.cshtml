@@ -3,7 +3,7 @@
     @if (!Model.ExcludeShortNotes || Model.NumberResultsExcluded == 0)
     {
         @:Showing results <span class="label label-info">@Model.ResultsRangeMin - @Model.ResultsRangeMax</span>.
-                }
+    }
     else
     {
         @:Showing <span class="label label-info">@Model.SearchResults.Count</span> notes from range
@@ -13,7 +13,7 @@
     <a asp-action="Search" asp-controller="Reader" asp-route-exclude="@Model.ExcludeShortNotes" asp-route-sortOrder="@Model.SortOrder" asp-route-sortAscending="@Model.SortAscending" asp-route-search="@Model.SearchField">Permalink to this search</a>.
     <span class="glyphicon glyphicon-info-sign" data-toggle="info-popover" data-placement="top" data-trigger="hover" data-content="Tip: to save this search, bookmark the permalink" style="top: 2px"></span>
 </div>
-<div class="search-results-section">
+<div class="search-results-pages-section">
     Results pages:
     @for (int i = 1; i <= Model.NumberOfResultsPages; i++)
     {

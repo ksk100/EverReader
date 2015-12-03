@@ -1,14 +1,14 @@
 ﻿
 
-div.search-results-section {
+div.search-results-section, div.search-results-pages-section {
     padding-bottom: 8px;
 }
 
-.search-results-section span {
+.search-results-pages-section span {
     padding-right: 4px;
 }
 
-.search-results-section span.active-page {
+.search-results-pages-section span.active-page {
     font-weight: bold;
 }
 

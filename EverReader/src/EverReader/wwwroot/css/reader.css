@@ -2,20 +2,3 @@
   top: 50px;
 }
 
-
-
-.popr_content hr
-{
-     border-color: #cccccc;
-}
-
-.popr_point_bottom:after {
-    border-bottom-color: #eee;
-}
-
-.popr_point_top:after {
-    border-top-color: #eee;
-}
-.popr_content {
-    background-color: #eee;
-}
