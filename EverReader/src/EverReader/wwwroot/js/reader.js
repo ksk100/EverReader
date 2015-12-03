@@ -48,7 +48,7 @@ var reader = (function ($, readerInDummyMode) {
                 "data": { "percentageRead": documentPercentageRead, "bookmarkTitle": selectedText },
                 "success": function (data) {
                     self.readerViewModel.addBookmark(data.id, documentPercentageRead, selectedText);
-                    everReaderNotify("Bookmark added");
+                    EverReaderJS.Notify("Bookmark added");
                 },
                 "error": function () {
                     // TODO: alert the user their position wasn't saved?
@@ -56,7 +56,7 @@ var reader = (function ($, readerInDummyMode) {
             });
         } else {
             self.readerViewModel.addBookmark(reader.readerViewModel.bookmarks().length, documentPercentageRead, selectedText);
-            everReaderNotify("Bookmark added");
+            EverReaderJS.Notify("Bookmark added");
         }
 
         return false;
@@ -71,18 +71,18 @@ var reader = (function ($, readerInDummyMode) {
                 "success": function (data) {
                     if (!data.error) {
                         self.readerViewModel.deleteBookmark(id);
-                        everReaderNotify("Bookmark deleted");
+                        EverReaderJS.Notify("Bookmark deleted");
                     } else {
-                        everReaderNotify("There was a problem deleting your bookmark", "danger");
+                        EverReaderJS.Notify("There was a problem deleting your bookmark", "danger");
                     }
                 },
                 "error": function () {
-                    everReaderNotify("There was a problem deleting your bookmark", "danger");
+                    EverReaderJS.Notify("There was a problem deleting your bookmark", "danger");
                 }
             });
         } else {
             self.readerViewModel.deleteBookmark(id);
-            everReaderNotify("Bookmark deleted");
+            EverReaderJS.Notify("Bookmark deleted");
         }
 
         event.stopPropagation();
@@ -164,9 +164,25 @@ $(document).ready(function () {
     $(window).scroll(null, reader.scrollHandler);
 
     // setup the view model for KO
-    reader.readerViewModel = (function () {
+    reader.readerViewModel = (function (documentTitle) {
         var bookmarks = ko.observableArray([]);
         var documentScrollPercent = ko.observable(0);
+        var copyMenu = [{
+            text: "Citation",
+            action: function () {
+                var citation = documentTitle + ' (' + documentScrollPercent().toFixed(2) + '%)';
+                EverReaderJS.CopyToClipboard(citation);
+                EverReaderJS.Notify("Citation copied to clipboard");
+            }
+        },
+        {
+            text: "URL permalink",
+            action: function () {
+                var url = window.location.toString() + '#' + documentScrollPercent().toFixed(2);
+                EverReaderJS.CopyToClipboard(url);
+                EverReaderJS.Notify("Permalink URL copied to clipboard");
+            }
+        }];
 
         function documentScrollPercentFormatted() {
             return formatPercentageRead(documentScrollPercent);
@@ -206,12 +222,13 @@ $(document).ready(function () {
 
         return {
             bookmarks: bookmarks,
+            copyMenu : copyMenu,
             addBookmark: addBookmark,
             deleteBookmark: deleteBookmark,
             documentScrollPercent: documentScrollPercent,
             documentScrollPercentFormatted: documentScrollPercentFormatted
         };
-    })();
+    })((typeof documentTitle === 'undefined') ? "Untitled Note" : documentTitle);
 
     ko.applyBindings(reader.readerViewModel);
 
