@@ -15,6 +15,7 @@ namespace EverReader.Models
         public DbSet<PrivateBetaUser> PrivateBetaUsers { get; set; }
         public DbSet<TagData> Tags { get; set; }
         public DbSet<NotebookData> Notebooks { get; set; }
+        public DbSet<TagOperationDefinition> Operations { get; set; }
 
         protected override void OnModelCreating(ModelBuilder builder)
         {

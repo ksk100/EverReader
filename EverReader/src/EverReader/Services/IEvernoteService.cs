@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace EverReader.Services
 {
-    interface IEvernoteService
+    public interface IEvernoteService
     {
         ISearchResults GetNotesMetaList(string searchString, NoteSortOrder sortOrder, bool ascending, int resultsPage, int pageSize);
         Note GetNote(string guid);
