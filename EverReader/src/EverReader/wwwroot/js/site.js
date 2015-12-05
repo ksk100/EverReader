@@ -4,10 +4,10 @@ var EverReaderJS = (function ($) {
 
     var self = {};
 
-    self.Notify = function (message, type, delay) {
+    self.Notify = function (message, type, delay, onClickHandler) {
 
         $.notify({
-            message: message
+            message: message        
         }, {
             type: type || 'success',
             placement: {
@@ -20,7 +20,8 @@ var EverReaderJS = (function ($) {
             animate: {
                 enter: 'animated fadeInDown',
                 exit: 'animated fadeOutUp'
-            }
+            },
+            onClick: onClickHandler || null
         });
     };
 

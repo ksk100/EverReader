@@ -134,11 +134,13 @@ var reader = (function ($, readerInDummyMode) {
 
                 if (percentageRead != 100 && documentScrollPercent == 100) {
                     completedReadingDocument = true;
-                    EverReaderJS.Notify("<strong>Reading completed!</strong><br />Auto-removing document from 'Recently Read' in 30 seconds.  <strong>Click here to cancel</strong>",
+                    EverReaderJS.Notify("<strong>Reading completed!</strong><br />Auto-removing document from 'Recently Read' list.  <strong>Click here to undo</strong>.",
                                         "info",
-                                        15000);
-                    // FIRE Reading Completed call.
-
+                                        25000,
+                                       function (event) {
+                                           // TODO: fire AJAX call to cancel the "mark as read" call
+                                       });
+                    // TODO: fire AJAX "mark as read" call
                 }
             }
 
