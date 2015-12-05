@@ -5,16 +5,17 @@ var reader = (function ($, readerInDummyMode) {
     var lastSelection = "";
     var lastSavedScrollTop = 0;
     var lastSavedScrollTopResetTimerSet = 0;
+    var completedReadingDocument = false;
 
-    function calculateDocumentReadPosition() {
+    self.calculateDocumentReadPosition = function () {
         var docHeight = $(document).height();
         var winHeight = $(window).height();
         var winScrollTop = $(window).scrollTop();
 
         return ((winScrollTop) / (docHeight - winHeight)) * 100;
-    }
+    };
 
-    function navigateToPosition(percentage) {
+    self.navigateToPosition = function (percentage) {
         reader.documentScrollPercent = percentage;
         var docHeight = $(document).height();
         var winHeight = $(window).height();
@@ -23,11 +24,11 @@ var reader = (function ($, readerInDummyMode) {
         $(window).scrollTop(targetScrollTop);
 
         self.readerViewModel.documentScrollPercent(percentage);
-    }
+    };
 
-    function getSelection() {
+    self.getSelection = function () {
         return window.getSelection().toString();
-    }
+    };
 
     function addBookmark() {
         // - get document percentage read
@@ -90,7 +91,8 @@ var reader = (function ($, readerInDummyMode) {
         return false;
     }
 
-    function scrollHandler () {
+    function scrollHandler() {
+        $("#positionReportBlock").removeClass("saved");
 
         // save the three positions
         var savedDocHeight = $(document).height();
@@ -112,17 +114,31 @@ var reader = (function ($, readerInDummyMode) {
 
                 var documentScrollPercent = ((savedWinScrollTop) / (savedDocHeight - savedWinHeight)) * 100;
 
-                if (!readerInDummyMode) {
+                if (completedReadingDocument) {
+                    // console.log("New scroll position: " + documentScrollPercent + ", but reading completed, ignoring");
+                }
+
+                if (!readerInDummyMode && !completedReadingDocument) {
                     $.ajax("/api/bookmarks/" + noteGuid, {
                         "method": "PUT",
                         "data": { "percentageRead": documentScrollPercent },
                         "success": function () {
                             lastSavedScrollTop = savedWinScrollTop;
+                            $("#positionReportBlock").addClass("saved");
                         },
                         "error": function () {
                             // TODO: alert the user their position wasn't saved?
                         }
                     });
+                }
+
+                if (percentageRead != 100 && documentScrollPercent == 100) {
+                    completedReadingDocument = true;
+                    EverReaderJS.Notify("<strong>Reading completed!</strong><br />Auto-removing document from 'Recently Read' in 30 seconds.  <strong>Click here to cancel</strong>",
+                                        "info",
+                                        15000);
+                    // FIRE Reading Completed call.
+
                 }
             }
 
@@ -144,9 +160,6 @@ var reader = (function ($, readerInDummyMode) {
     }
 
     // the external interface exposed
-    self.calculateDocumentReadPosition = calculateDocumentReadPosition;
-    self.getSelection = getSelection;
-    self.navigateToPosition = navigateToPosition;
     self.addBookmark = addBookmark;
     self.deleteBookmark = deleteBookmark;
     self.scrollHandler = scrollHandler;
