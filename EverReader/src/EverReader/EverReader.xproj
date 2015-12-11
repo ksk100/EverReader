@@ -13,7 +13,7 @@
   </PropertyGroup>
   <PropertyGroup>
     <SchemaVersion>2.0</SchemaVersion>
-    <DevelopmentServerPort>56815</DevelopmentServerPort>
+    <DevelopmentServerPort>56816</DevelopmentServerPort>
   </PropertyGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\..\..\AsyncOAuth.Evernote.Simple\AsyncOAuth.Evernote.Simple\AsyncOAuth.Evernote.Simple.csproj" />
